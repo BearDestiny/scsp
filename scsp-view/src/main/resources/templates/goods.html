@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/goods.css" rel="stylesheet">
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src="/js/axios.js"></script>
+
+    <title>灵颖校园--xx商品</title>
+</head>
+<body>
+    <!-- 通用头部导航栏 -->
+    <div th:replace="head::head"></div>
+    <!-- 卖家背景图 -->
+    <div class="sellerWrap">
+        <div class="seller">
+            <div class="sellerName">
+                <span style="margin-left: 3rem;" th:text="${good.user_nickname}+'的摊位'">xxx的摊位</span>
+            </div>
+            <div class="sellerBtn">
+                <div class="chatWithSeller">
+                    <button data-bs-toggle="modal" data-bs-target="#talkToSeller">
+                    <div class="svg-wrapper-1">
+                      <div class="svg-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                          <path fill="none" d="M0 0h24v24H0z"></path>
+                          <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <span>联系摊主</span>
+                  </button>
+                </div>
+                <div class="backToStall">
+                    <button id="stallBtn"> <span>看Ta摊位</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 商品主要信息 -->
+    <div class="goodsMainInfoWrap">
+        <div class="goodsMainInfo">
+            <!-- 封面图 -->
+            <div class="goodsImgWrap">
+                <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${good.cover_img}">
+            </div>
+            <div class="goodsTitleWrap">
+                <div class="goodsName"><span class=".text-truncate" th:text="${good.good_name}">商品名称</span></div>
+                <div class="goodsPrice"><span>￥</span><span th:text="${good.good_price}">499</span></div>
+                <div style="display: flex">
+                    <div class="goodsCategory" style="font-weight: 600; white-space: nowrap;">
+                        <span>单品分类：</span>
+                        <span th:text="${good.category_name}"></span>
+                    </div>
+                    <div class="goodNum" style="font-weight: 600;white-space: nowrap;">
+                        <span>余量：</span>
+                        <span id="goodNum" th:text="${good.good_number}"></span>
+                    </div>
+                </div>
+                <div class="buyNum">
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary minus-btn" type="button">-</button>
+                        </div>
+                        <input id="numInput" type="text" class="form-control" value="1" min="1">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary plus-btn" type="button">+</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="goodsBtnWrap">
+                    <div class="buyBtn"><button class="btn" data-bs-toggle="modal" data-bs-target="#sheduleNotice"> 直接预定
+                    </button></div>
+                    <div class="cart" style="margin-top: 2rem;">
+                        <button id="goodCollect">
+                            <div class="default-btn">
+                              <svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="#FFF" height="20" width="20" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle r="3" cy="12" cx="12"></circle></svg>
+                              <span>考虑一下</span>
+                            </div>
+                            <div class="hover-btn">
+                              <svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="#ffd300" height="20" width="20" viewBox="0 0 24 24"><circle r="1" cy="21" cx="9"></circle><circle r="1" cy="21" cx="20"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                              <span>加 购</span>
+                            </div>
+                          </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 商品详细信息 -->
+    <div class="goodsMoreInfoWrap">
+        <div class="goodsMoreInfo">
+            <div class="infoTitle"><span>商品详情</span> </div>
+            <div class="infoDetail" th:text="${good.good_detail}">
+            </div>
+            <div class="infoImg">
+                <img th:if="${good.detail_img} != null" th:each="img : ${good.detail_img}" th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${img}">
+            </div>
+        </div>
+    </div>
+
+    <!-- 预定确认模态 -->
+    <div class="modal fade" id="sheduleNotice" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sheduleNoticeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="sheduleNoticeLabel">预定说明</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>确认预定后，系统会向卖家发送短信提醒，督促其尽快与您取得联系。或者您主动与卖家联系，以下是卖家联系方式：</p>
+                    <p><span>QQ：</span></p>
+                    <p> <span>微信：</span></p>
+                    <p><span>手机号：</span></p>
+                    <p><span>qita</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button id="scheduleBtn" type="button" class="btn btn-success">再次确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  留言模态  -->
+    <div class="modal fade" id="talkToSeller" tabindex="-1" aria-labelledby="talkToSellerLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="talkToSellerLabel" th:text="'给'+${good.user_nickname}+'的话'">New message</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                            <label for="message-text" class="col-form-label">例：我很喜欢这个，我的QQ是12**，可以详谈吗？</label>
+                            <textarea th:id="talkInput" class="form-control" id="message-text"></textarea></div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button id="talkSendBtn" type="button" class="btn btn-outline-info">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+
+    //获取当前用户信息
+    let user_id
+
+
+    //用户登录状态校验
+    let toLoginHref = document.getElementById('toLoginHref');
+    let myInfo = document.getElementsByClassName('dorpdown-myinfo');
+    let homeLink = document.getElementsByClassName('link-title')[3]
+    let userToken = localStorage.getItem('userToken');
+
+    //token存在，过期未知
+    if( userToken != null){
+        axios({
+            method: 'get',
+            url: '/user/verifiedUserToken',
+            headers: {'userToken':userToken}
+        }) .then(function (response){
+            //用户已登录
+            if( response.data.code === '001' ){
+                //本地更新token
+                localStorage.setItem("userToken",response.data.data[0])
+                //登录状态更改
+                homeLink.classList.add("home")
+                toLoginHref.href='/home';
+                toLoginHref.innerText = '个人中心';
+                myInfo[0].innerText = response.data.data[1].user_account
+
+                user_id = response.data.data[1].user_id
+
+            } else {
+                console.log(12)
+                //用户登录失效，删除旧token
+                localStorage.removeItem("userToken");
+                userToken = localStorage.getItem("userToken")
+            }
+        });
+    }
+
+
+    //登出
+    function logout(){
+        localStorage.removeItem("userToken");
+        axios({
+            method: 'get',
+            url: '/user/logout',
+        }) .then(function (response){
+            homeLink.classList.remove("home")
+            toLoginHref.href='/login';
+            toLoginHref.innerText = '登录';
+        });
+    }
+
+    //数量选择
+    let minusBtn = document.querySelector('.minus-btn');
+    let plusBtn = document.querySelector('.plus-btn');
+    let numInput = document.querySelector('#numInput');
+    let numberDiv = document.querySelector('#goodNum');
+    let currentNumber = parseInt(numInput.value);
+
+    minusBtn.addEventListener('click', () => {
+        if (currentNumber > 1) {
+            currentNumber--;
+            numInput.value = currentNumber;
+        }
+    });
+
+    plusBtn.addEventListener('click', () => {
+        let maxNumber = parseInt(numberDiv.textContent);
+        if (currentNumber < maxNumber) {
+            currentNumber++;
+            numInput.value = currentNumber;
+        }
+    });
+
+
+
+    //预定
+    let scheduleBtn = document.getElementById('scheduleBtn')
+    scheduleBtn.onclick = function (){
+        let token = localStorage.getItem('userToken')
+        if( token === null ){
+            window.location.href = '/login'
+        } else {
+            console.log(parseInt(numInput.value))
+            axios({
+                method: 'post',
+                url: '/order/save',
+                data: {
+                    good_id : [[${good.good_id}]],
+                    buyer_id : user_id,
+                    buy_num : parseInt(numInput.value)
+                }
+            }) .then(function (response){
+                if ( response.data.code === '001' ){
+                    alert('预定成功！')
+                } else {
+                    alert('操作失败，请稍后再试。')
+                    window.location.reload()
+                }
+            });
+        }
+    }
+
+    //收藏
+    let goodCollect = document.getElementById('goodCollect')
+    goodCollect.onclick = function (){
+        let token = localStorage.getItem('userToken')
+        if( token === null ){
+            window.location.href = '/login'
+        } else {
+            axios({
+                method: 'get',
+                url: '/market/collect',
+                params: {
+                    good_id : [[${good.good_id}]],
+                    user_id : user_id
+                }
+            }) .then(function (response){
+                if ( response.data.code === '001' ){
+                    alert('收藏成功！')
+                } else if( response.data.msg === '已收藏' ){
+                    alert('已收藏过该商品，可在个人中心取消。')
+                } else {
+                    alert('错误，请稍后再试')
+                }
+            });
+        }
+    }
+
+    //留言给商家
+    let talkSendBtn = document.getElementById('talkSendBtn')
+    let talkInput = document.getElementById('talkInput')
+    talkSendBtn.onclick = function () {
+        let token = localStorage.getItem('userToken')
+        if (token === null) {
+            window.location.href = '/login'
+        } else if (talkInput.value.length >0 ) {
+            if( user_id === [[${good.seller_id}]] ){
+                alert('无法向自己留言')
+            } else {
+                axios({
+                    method: 'post',
+                    url: '/market/talk',
+                    data: {
+                        speaker_id: user_id,
+                        listener_id: [[${good.seller_id}]],
+                        message: talkInput.value
+                    }
+                }).then(function (response) {
+                    if (response.data.code === '001') {
+                        alert('留言成功')
+                    } else {
+                        alert('留言失败，请稍后重试')
+                    }
+                });
+            }
+        }
+    }
+
+    //摊位
+    let stallBtn = document.getElementById('stallBtn')
+    stallBtn.onclick = function (){
+        window.location.href = '/stall/'+[[${good.user_nickname}]]+'/timeDESC'
+    }
+
+</script>
+
+</html>

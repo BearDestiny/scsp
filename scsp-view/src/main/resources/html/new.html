@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal Example</title>
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/js/axios.js"></script>
+    <!-- 引入Bootstrap的CSS文件 -->
+
+    <!-- 自定义CSS样式 -->
+    <style>
+        #danmu-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10rem;
+            background-color: #00e6f6;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .danmu-item {
+            color: black;
+            font-size: 20px;
+            position: absolute;
+            white-space: nowrap; /* prevent text from wrapping */
+        }
+
+        .danmu-input{
+            position: relative;
+            /*top: 90%;*/
+            /*left: 45%;*/
+            /*display: none;*/
+        }
+
+        #danmu-container:hover{
+        }
+    </style>
+</head>
+<body>
+
+<div id="danmu-container">
+    <div class="input-group input-group-sm mb-3" style="width: 30%;margin: 0 auto;top: 18rem;">
+        <input id="damuInput" type="text" class="form-control danmu-input" placeholder="输入弹幕" style="width: 80%;">
+        <button id="danmuBtn" class="btn btn-success" type="button" style="width: 15%;">发送</button>
+        <input id="damuColor" type="color" class="form-control form-control-color danmu-input"  value="#000000" title="选择弹幕颜色" style="width: 5%;height: 1.9rem;">
+    </div>
+</div>
+
+<script>
+    var danmuContainer = document.getElementById('danmu-container');
+    var danmuInput = document.getElementById('danmu-input');
+    var danmuTimers = [];
+
+    function loadDanmuData(callback) {
+        axios({
+            method: 'get',
+            url : '/market/getDanmu'
+        }) .then(function (response){
+            callback(response.data.data);
+        });
+    }
+
+    function createDanmu(danmuData) {
+        var danmu = document.createElement('div');
+        danmu.innerText = danmuData.danmu_text; // use data text as innerText
+        danmu.className = 'danmu-item';
+        danmu.style.color = danmuData.danmu_color; // set style according to data
+        danmu.style.fontWeight = danmuData.weight;
+        danmu.style.top = Math.floor(Math.random() * danmuContainer.offsetHeight) + 'px';
+        danmu.style.left = danmuContainer.offsetWidth + 'px';
+        danmuContainer.appendChild(danmu);
+
+        var width = danmu.offsetWidth;
+        danmu.style.width = width + 'px';
+
+        var speed = 2; // pixels per second
+        var danmuTimer = setInterval(function() {
+            var currentPosition = parseInt(danmu.style.left);
+            if (currentPosition < -danmu.offsetWidth) {
+                clearInterval(danmuTimer);
+                danmuContainer.removeChild(danmu);
+            } else {
+                danmu.style.left = (currentPosition - speed) + 'px';
+            }
+        }, 1000 / 60); // 60 frames per second
+
+        danmu.addEventListener('mouseenter', function() {
+            clearInterval(danmuTimer);
+        });
+
+        danmu.addEventListener('mouseleave', function() {
+            danmuTimer = setInterval(function() {
+                var currentPosition = parseInt(danmu.style.left);
+                if (currentPosition < -danmu.offsetWidth) {
+                    clearInterval(danmuTimer);
+                    danmuContainer.removeChild(danmu);
+                } else {
+                    danmu.style.left = (currentPosition - speed) + 'px';
+                }
+            }, 1000 / 60); // 60 frames per second
+        });
+
+        danmuTimers.push(danmuTimer);
+    }
+
+    function initDanmu() {
+        loadDanmuData(function(data) {
+            // create a danmu element for each data item
+            data.forEach(function(item) {
+                createDanmu(item);
+            });
+        });
+    }
+
+    initDanmu();
+
+    window.onload = function (){
+
+        //发弹幕
+        let danmuBtn = document.getElementById('danmuBtn')
+        danmuBtn.onclick = function (){
+            let damuInput = document.getElementById('damuInput').value
+            let danmuColor = document.getElementById('damuColor').value
+            if( damuInput !== '' ){
+                axios({
+                    method: 'post',
+                    url : '/market/addDanmu',
+                    data:{
+                        danmu_text : damuInput,
+                        danmu_color : danmuColor
+                    }
+                }) .then(function (response){
+                    if( response.data.code === '001' ){
+                        alert('发布成功');
+                    }
+                });
+            }
+        }
+
+
+    }
+
+
+
+
+</script>
+</body>
+</html>

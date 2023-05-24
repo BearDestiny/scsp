@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.beardestiny.scsp.mapper.UserMapper">
+    <select id="getLoginfoByUserAccount" resultType="Map">
+        select user_password,user_nickname from `user` where user_account = #{user_account}
+    </select>
+
+    <select id="getNicknameByUserId" resultType="String">
+        select user_nickname from `user` where user_id = #{user_id}
+    </select>
+
+<!--    <select id="getUserByAccount" resultType="cn.beardestiny.scsp.entityUser">-->
+<!--        select id,user_id,user_account,user_password,user_phone,user_sno,user_currency,user_nickname,user_headImg,create_time,modify_time from `user` where user_account = #{user_account}-->
+<!--    </select>-->
+
+    <select id="getUserAchiByUserAccount" resultType="cn.beardestiny.scsp.entity.UserAchi">
+        select user_account,achi_repute,achi_know,achi_currency,achi_beloved,achi_have,achi_using from `user_achievement` where user_account = #{user_account}
+    </select>
+
+    <select id="getCurrencyByUserAccount" resultType="Long">
+        select user_currency from `user` where user_account = #{user_account}
+    </select>
+
+    <select id="getUserIdByUserAccount" resultType="Long">
+        select user_id from `user` where user_account = #{user_account}
+    </select>
+</mapper>

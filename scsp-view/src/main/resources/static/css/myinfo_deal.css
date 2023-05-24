@@ -1,0 +1,132 @@
+.buyAndSell {
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: 600;
+    background-color: antiquewhite;
+}
+
+.orderWrap {
+    height: 40rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.mysearch{
+    margin-top: 1rem;
+}
+
+.myinput {
+    width: 100%;
+    height: 2rem;
+    line-height: 28px;
+    padding: 0 1rem;
+    padding-left: 2.5rem;
+    border: 2px solid transparent;
+    outline: none;
+    background-color: #f3f3f4;
+    color: #0d0c22;
+    transition: .3s ease;
+}
+
+.myinput::placeholder {
+    color: #9e9ea7;
+}
+
+.myinput:focus,
+input:hover {
+    outline: none;
+    border-color: rgba(234, 76, 137, 0.4);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+}
+
+.myicon {
+    position: absolute;
+    left: 1rem;
+    fill: #9e9ea7;
+    width: 1rem;
+    height: 1rem;
+}
+
+.orderInfoWrap{
+
+}
+
+
+.orderItemWrap{
+    /* height: 10rem; */
+    width: 100%;
+    margin-top: 1rem;
+    background-color:#3434e3;
+}
+
+.orderItem{
+    height: 8rem;
+    width: 100%;
+    margin-bottom: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(199, 246, 228);
+}
+
+.orderNum{
+    font-size: 0.8rem;
+    display: flex;
+}
+
+.orderInfo{
+    height: 75%;
+    width: 98%;
+    font-size: 0.9rem;
+    margin: 0.5rem auto;
+    display: flex;
+    background-color: chartreuse;
+}
+
+.orderInfoPosition{
+    width: 15%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.offcanvas.offcanvas-start-right{
+    top: 0;
+    right: 0;
+    width: var(--bs-offcanvas-width);
+    border-right: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+    transform: translateX(-30%);
+}
+
+.sellside{
+    width: 45rem !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.preview-item {
+    display: inline-block;
+    margin: 10px;
+    position: relative; /* 使删除按钮的定位相对于该元素 */
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+

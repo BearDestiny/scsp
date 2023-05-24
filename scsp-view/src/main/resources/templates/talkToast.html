@@ -1,0 +1,11 @@
+<div th:each="item : ${talkList}" class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <img th:src=" 'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/' + ${item.user_headImg} "  class="rounded me-2" style="    height: 25px;width: 25px;">
+    <strong class="me-auto" th:text="${item.speaker_name}">Bootstrap</strong>
+    <small class="text-muted" th:text="${item.create_time}">just now</small>
+    <button th:id="${item.id}" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" onclick="readTalk(this.id)"></button>
+  </div>
+  <div class="toast-body" th:text=" ${item.message}">
+    See? Just like this.
+  </div>
+</div>

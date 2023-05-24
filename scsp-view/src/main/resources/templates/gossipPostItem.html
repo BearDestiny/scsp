@@ -1,0 +1,43 @@
+<div class="item" th:each="p:${postList}">
+    <div class="speaker">
+        <div class="headImg">
+            <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${p.user_headImg}">
+        </div>
+        <div class="speakerInfo">
+            <span class="speakerName" th:text="${p.user_nickname}">发布者用户名</span>
+            <span th:text="${p.create_time}">几月几日</span>
+        </div>
+    </div>
+    <div class="speakInfo">
+        <div class="wordArea">
+            <span th:text="${p.post_text}">发布内容</span>
+        </div>
+        <div class="imgArea">
+            <img th:if="${p.post_img} != null" th:each="pImg:${p.post_img}" th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${pImg}" />
+        </div>
+    </div>
+    <div class="funcArea">
+        <span th:if="${p.post_like != 0 }" th:text="'共有'+ ${p.post_like} +'人表示支持'"></span>
+        <span th:if="${p.post_like == 0 }" th:text="null"></span>
+        <div th:id="${p.post_id}" style="display: flex;margin-right: 2rem;">
+            <div class="like disActive" style="margin-right: 1rem;">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-dianzan"></use>
+                </svg></div>
+            <div class="commentIcon" data-bs-toggle="modal" data-bs-target="#commentModal">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-pinglun"></use>
+                </svg></div>
+        </div>
+    </div>
+    <div class="commentsArea">
+        <ul class="commentsUl" style="padding-left: 0;">
+            <li>
+                <p th:if="${p.post_comment != null}" th:each="c : ${p.post_comment}" style="margin-bottom: 0;">
+                    <span  th:text="${c.user_nickname}+'：'" style="color:#0078ff;">用户A</span>
+                    <span  th:text="${c.comment_content}"></span>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>

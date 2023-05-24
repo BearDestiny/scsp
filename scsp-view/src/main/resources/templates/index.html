@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
+
+    <script src="/js/axios.js"></script>
+    <script src="/js/iconfont.js"></script>
+
+
+    <title>灵颖校园</title>
+</head>
+<body>
+    <!-- 通用头部导航栏 -->
+    <div th:replace="head::head"></div>
+    <!-- 超级表白 -->
+    <div class="mainwrap">
+        <div class="main">
+            <div class="maininfo">
+                <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                      <button th:each="item,loop : ${carouselList}" type="button" data-bs-target="#mainCarousel" th:data-bs-slide-to="${loop.index}" th:class="${loop.index}==0? 'active' : ' '" aria-current="true" th:aria-label="'Slide '+${loop.count}"></button>
+                    </div>
+                    <div class="carousel-inner">
+                      <div th:each="item,loop : ${carouselList}" th:class="${loop.index}==0? 'carousel-item active' : 'carousel-item' " data-bs-interval="5000">
+                        <div class="publisher">
+                            <span th:text="${item.sender_name}"></span>
+                            <span class="marginleft-2rem">赠送</span>
+                            <span class="marginleft-2rem" th:text="${item.reciver_name}"></span>
+                            <div class="marginleft-2rem">
+                                <svg class="icon" aria-hidden="true">
+                                    <use th:xlink:href="'#icon-' + ${item.theme}"></use>
+                                </svg>
+                            </div>
+                        </div>
+                        <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${item.carousel_img}">
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 弹幕 -->
+    <div class="bulletchat">
+        弹幕
+    </div>
+    <!-- 重要资讯 -->
+    <div class="informationwrap">
+        <div class="infoWrap">
+            <div class="infoTitle">
+                <span style="line-height:1rem">要闻告牌</span>
+                <span class="more">更多</span>
+            </div>
+            <div class="dynamicInfo">
+                <ul>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                </ul>
+            </div>
+        </div>
+        <div style="height:100%;width:10%;"></div>
+        <div class="infoWrap">
+            <div class="infoTitle">
+                <span style="line-height:1rem">校园江湖令</span>
+                <span class="more">更多</span>
+            </div>
+            <div class="dynamicInfo">
+                <ul>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                    <li><span>测试数据</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 今日诗 -->
+    <div class="todayPoemWrap">
+        <div style="height: 20%;">
+            <span style="font-size: 1.3rem;font-weight: 600;letter-spacing: 0.4rem;">今日诗</span>
+            <span style="margin-left:3rem;">分享者：xxx</span>
+        </div>
+        <div class="poemContent">
+            <span style="font-size: 1.1rem;margin: 0 auto;letter-spacing: 0.2rem;">古人系辞黄鹤楼，烟花三月下扬州。水电费胜多负少三三顿饭递四方速递顿三顿饭递四方速递饭第三方但是的第三方</span>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+
+    //用户登录状态校验
+    let toLoginHref = document.getElementById('toLoginHref');
+    let myInfo = document.getElementsByClassName('dorpdown-myinfo');
+    let homeLink = document.getElementsByClassName('link-title')[3]
+    let userToken = localStorage.getItem('userToken');
+    let thisUser = null;
+
+    //token存在，过期未知
+    if( userToken != null){
+        axios({
+            method: 'get',
+            url: '/user/verifiedUserToken',
+            headers: {'userToken':userToken}
+        }) .then(function (response){
+            //用户已登录
+            if( response.data.code === '001' ){
+                //本地更新token
+                localStorage.setItem("userToken",response.data.data[0])
+                //登录状态更改
+                homeLink.classList.add("home")
+                toLoginHref.href='/home';
+                toLoginHref.innerText = '个人中心';
+                myInfo[0].innerText = response.data.data[1].user_account
+                //赋值用户信息
+                console.log(response.data.data[1])
+                thisUser = response.data.data[1]
+            } else {
+                //用户登录失效，删除旧token
+                localStorage.removeItem(userToken);
+                userToken = localStorage.getItem("userToken")
+            }
+        });
+    }
+
+
+    //登出
+    function logout(){
+        localStorage.removeItem("userToken");
+        axios({
+            method: 'get',
+            url: '/user/logout',
+        }) .then(function (response){
+            homeLink.classList.remove("home")
+            toLoginHref.href='/login';
+            toLoginHref.innerText = '登录';
+        });
+    }
+
+</script>
+</html>

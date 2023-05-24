@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/gossipwall.css" rel="stylesheet">
+
+    <script src="/js/axios.js"></script>
+    <script src="/js/iconfont.js"></script>
+
+
+    <title>灵颖校园--校园墙</title>
+</head>
+<body>
+    <!-- 通用头部导航栏 -->
+    <div th:replace="head::head"></div>
+    <!-- 校园墙主体 -->
+    <div class="mainWrap">
+        <div class="addBtnWrap">
+            <button id="addBtn">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 发 帖
+            </button>
+        </div>
+        <div class="main">
+            <div class="confessItemWrap">
+                <div class="item" th:each="p:${postList}">
+                    <div class="speaker">
+                        <div class="headImg">
+                            <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${p.user_headImg}">
+                        </div>
+                        <div class="speakerInfo">
+                            <span class="speakerName" th:text="${p.user_nickname}">发布者用户名</span>
+                            <span th:text="${p.create_time}">几月几日</span>
+                        </div>
+                    </div>
+                    <div class="speakInfo">
+                        <div class="wordArea">
+                            <span th:text="${p.post_text}">发布内容</span>
+                        </div>
+                        <div class="imgArea">
+                            <img th:if="${p.post_img} != null" th:each="pImg:${p.post_img}" th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${pImg}" />
+                        </div>
+                    </div>
+                    <div class="funcArea">
+                        <span th:if="${p.post_like != 0 }" th:text="'共有'+ ${p.post_like} +'人表示支持'"></span>
+                        <span th:if="${p.post_like == 0 }" th:text="null"></span>
+                        <div th:id="${p.post_id}" style="display: flex;margin-right: 2rem;">
+                            <div class="like disActive" style="margin-right: 1rem;">
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-dianzan"></use>
+                                </svg></div>
+                            <div class="commentIcon" data-bs-toggle="modal" data-bs-target="#commentModal">
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-pinglun"></use>
+                            </svg></div>
+                        </div>
+                    </div>
+                    <div class="commentsArea">
+                        <ul class="commentsUl" style="padding-left: 0;">
+                            <li>
+                                <p th:if="${p.post_comment != null}" th:each="c : ${p.post_comment}" style="margin-bottom: 0;">
+                                    <span  th:text="${c.user_nickname}+'：'" style="color:#0078ff;">用户A</span>
+                                    <span  th:text="${c.comment_content}"></span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="successStone">
+                <div class="stoneTitle">纪念墙</div>
+                <div class="stoneImgWrap">
+                    <ul style="padding-left: 0;">
+                        <li><img src="/img/c3.jpg"/></li>
+                        <li><img src="/img/x2.jpg"/></li>
+                        <li><img src="/img/x3.jpg"/></li>
+                        <li><img src="/img/xc6.jpg"/></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评论Modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="commentModalLabel">评论内容</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="commentInput" class="form-control" rows="3" ></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button id="commentInputBtn" type="button" class="btn btn-success">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+    //用户登录状态校验
+    let toLoginHref = document.getElementById('toLoginHref');
+    let myInfo = document.getElementsByClassName('dorpdown-myinfo');
+    let homeLink = document.getElementsByClassName('link-title')[3]
+    let userToken = localStorage.getItem('userToken');
+    let thisUser = null;
+
+    //token存在，过期未知
+    if( userToken != null){
+        axios({
+            method: 'get',
+            url: '/user/verifiedUserToken',
+            headers: {'userToken':userToken}
+        }) .then(function (response){
+            //用户已登录
+            if( response.data.code === '001' ){
+                //本地更新token
+                localStorage.setItem("userToken",response.data.data[0])
+                //登录状态更改
+                homeLink.classList.add("home")
+                toLoginHref.href='/home';
+                toLoginHref.innerText = '个人中心';
+                myInfo[0].innerText = response.data.data[1].user_account
+                //赋值用户信息
+                thisUser = response.data.data[1]
+            } else {
+                //用户登录失效，删除旧token
+                localStorage.removeItem(userToken);
+                userToken = localStorage.getItem("userToken")
+            }
+        });
+    }
+
+
+    //登出
+    function logout(){
+        localStorage.removeItem("userToken");
+        axios({
+            method: 'get',
+            url: '/user/logout',
+        }) .then(function (response){
+            homeLink.classList.remove("home")
+            toLoginHref.href='/login';
+            toLoginHref.innerText = '登录';
+        });
+    }
+
+    //用户本地token
+    // let token = localStorage.getItem("userToken")
+
+    let addBtn = document.getElementById('addBtn')
+    //点击发布按钮，跳转帖子发布页面
+    addBtn.onclick = function (){
+        //用户未登录
+        if ( userToken == null){
+            window.location.replace('/login')
+        }
+        window.open('/addGossipPost.html')
+    }
+
+    //监听页面加载事件
+    // window.addEventListener('load',function(){
+    // })
+
+
+    // 获取用户点赞数据
+        //用户已登录
+        if( userToken != null ){
+            //获取用户点赞数据
+            axios({
+                method: 'get',
+                url: '/gossipwall/userGossipPostLikeList',
+                headers: {'userToken':userToken}
+            }) .then( function (response) {
+                let likeList = response.data.data
+                for (let i in likeList) {
+                    let likeDiv = document.getElementById(likeList[i])
+                    likeDiv.childNodes[1].childNodes[1].childNodes[1].setAttribute('xlink:href', '#icon-dianzan1')
+                    likeDiv.childNodes[1].className = 'like active'
+                }
+            });
+        }
+
+
+    //等待dom加载完毕 ( 巨坑 )
+    window.onload = function (){
+
+        //帖子点赞 与 取消点赞
+        let likeBtn = document.getElementsByClassName('like')
+        for (let i=0 ; i < likeBtn.length; i++ ) {
+            likeBtn[i].onclick = function (){
+                //用户已登录
+                if( userToken != null ){
+                    //未点赞
+                    if( likeBtn[i].className === 'like disActive' ){
+                        axios({
+                            method: 'get',
+                            url: '/gossipwall/gossipPostLike',
+                            headers: {'userToken':userToken},
+                            params:{
+                                post_id: likeBtn[i].parentNode.id
+                            }
+                        }) .then(function (response) {
+                            //点赞成功
+                            if(response.data.code === '001'){
+                                likeBtn[i].childNodes[1].childNodes[1].setAttribute('xlink:href', '#icon-dianzan1')
+                                likeBtn[i].className = 'like active'
+                            }
+                        });
+                    }
+                    //已点赞，再点取消
+                    if( likeBtn[i].className === 'like active'){
+                        axios({
+                            method: 'get',
+                            url: '/gossipwall/gossipPostLikeCancel',
+                            headers: {'userToken':userToken},
+                            params:{
+                                post_id: likeBtn[i].parentNode.id
+                            }
+                        }) .then(function (response) {
+                            //取消点赞成功
+                            if(response.data.code === '001'){
+                                likeBtn[i].childNodes[1].childNodes[1].setAttribute('xlink:href', '#icon-dianzan')
+                                likeBtn[i].className = 'like disActive'
+                            }
+                        });
+                    }
+                } else {
+                    //用户未登录
+                    alert('请登录后操作')
+                }
+
+            }
+        }
+
+        //帖子评论
+        let commentInputBtn = document.getElementById('commentInputBtn')
+        let commentInput = document.getElementById('commentInput')
+        let commentIcon = document.querySelectorAll('.commentIcon')
+        commentIcon.forEach(div => {
+            div.addEventListener('click', () => {
+                commentInput.setAttribute('valuefor',div.parentNode.id)
+            });
+        });
+
+        commentInputBtn.onclick = function () {
+                    //用户已登录
+                    if( userToken != null ){
+                        axios({
+                            method: 'post',
+                            url: '/gossipwall/addPostComment',
+                            headers: {'userToken':userToken},
+                            data:{
+                                post_id: commentInput.getAttribute('valuefor') ,
+                                user_id: thisUser.user_id ,
+                                comment_content: commentInput.value
+                            }
+                        }) .then(function (response) {
+                            //取消点赞成功
+                            if(response.data.code === '001'){
+                                alert('评论成功')
+                            }
+                        });
+                    } else {
+                        //用户未登录
+                        alert('请登录后操作')
+                    }
+        }
+
+    }
+
+     //触底加载事件
+    let pageCount = 1   //页码计数器
+    window.addEventListener("scroll", function () {
+        if (document.documentElement.clientHeight + window.scrollY > document.documentElement.scrollHeight) {
+            let confessItemWrap = document.getElementsByClassName('confessItemWrap')[0]
+            let lastP = confessItemWrap.lastElementChild
+            //页码加一
+            pageCount = pageCount + 1
+            //分页请求
+            axios({
+                method: 'get',
+                url: '/gossipwall/page',
+                params:{
+                    pageNum: pageCount
+                }
+            }) .then( function (response) {
+                if( response.data.length > 0 ){
+                    lastP.insertAdjacentHTML('afterend',response.data)
+                } else {
+                    lastP.insertAdjacentText('afterend', '没有更多了......')
+                }
+            });
+        }
+    })
+
+
+    //帖子搜索
+    let headSearchInput = document.getElementById('headSearchInput')
+    headSearchInput.addEventListener('keyup' , function (event) {
+        if( event.key === 'Enter'){
+            event.preventDefault()
+            //发起搜索
+            let keyword = headSearchInput.value
+            axios({
+                method: 'get',
+                url: '/gossipwall/searchLike',
+                params:{
+                    keyword: keyword
+                }
+            }) .then( function (response) {
+                if( response.data.length > 0 ){
+                    document.getElementsByClassName('confessItemWrap')[0].innerHTML = response.data
+                }
+            });
+
+        }
+    })
+
+</script>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="/css/addGossipPost.css" rel="stylesheet">
+<!--    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">-->
+
+    <script src="/js/iconfont.js"></script>
+
+    <script src="/js/axios.js" type="text/javascript"></script>
+    <script src="/bootstrap/js/bootstrap.js" type="text/javascript"></script>
+
+    <title>灵颖校园--校园墙发帖</title>
+</head>
+<body>
+<div class="formWrap">
+    <div style="margin-right: 2rem;">
+        <div >
+            <label class="plane-switch">
+            <input type="checkbox">
+            <div id="toggleBtn">
+                <div>
+                    <svg viewBox="0 0 13 13">
+                        <path d="M1.55989957,5.41666667 L5.51582215,5.41666667 L4.47015462,0.108333333 L4.47015462,0.108333333 C4.47015462,0.0634601974 4.49708054,0.0249592654 4.5354546,0.00851337035 L4.57707145,0 L5.36229752,0 C5.43359776,0 5.50087375,0.028779451 5.55026392,0.0782711996 L5.59317877,0.134368264 L7.13659662,2.81558333 L8.29565964,2.81666667 C8.53185377,2.81666667 8.72332694,3.01067661 8.72332694,3.25 C8.72332694,3.48932339 8.53185377,3.68333333 8.29565964,3.68333333 L7.63589819,3.68225 L8.63450135,5.41666667 L11.9308317,5.41666667 C12.5213171,5.41666667 13,5.90169152 13,6.5 C13,7.09830848 12.5213171,7.58333333 11.9308317,7.58333333 L8.63450135,7.58333333 L7.63589819,9.31666667 L8.29565964,9.31666667 C8.53185377,9.31666667 8.72332694,9.51067661 8.72332694,9.75 C8.72332694,9.98932339 8.53185377,10.1833333 8.29565964,10.1833333 L7.13659662,10.1833333 L5.59317877,12.8656317 C5.55725264,12.9280353 5.49882018,12.9724157 5.43174295,12.9907056 L5.36229752,13 L4.57707145,13 L4.55610333,12.9978962 C4.51267695,12.9890959 4.48069792,12.9547924 4.47230803,12.9134397 L4.47223088,12.8704208 L5.51582215,7.58333333 L1.55989957,7.58333333 L0.891288881,8.55114605 C0.853775374,8.60544678 0.798421006,8.64327676 0.73629202,8.65879796 L0.672314689,8.66666667 L0.106844414,8.66666667 L0.0715243949,8.66058466 L0.0715243949,8.66058466 C0.0297243066,8.6457608 0.00275502199,8.60729104 0,8.5651586 L0.00593007386,8.52254537 L0.580855011,6.85813984 C0.64492547,6.67265611 0.6577034,6.47392717 0.619193545,6.28316421 L0.580694768,6.14191703 L0.00601851064,4.48064746 C0.00203480725,4.4691314 0,4.45701613 0,4.44481314 C0,4.39994001 0.0269259152,4.36143908 0.0652999725,4.34499318 L0.106916826,4.33647981 L0.672546853,4.33647981 C0.737865848,4.33647981 0.80011301,4.36066329 0.848265401,4.40322477 L0.89131128,4.45169723 L1.55989957,5.41666667 Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <span class="street-middle"></span>
+                <span class="cloud"></span>
+                <span class="cloud two"></span>
+            </div>
+        </label>
+        </div>
+        <div style="font-size: 0.6rem;color: gray"><span style="margin-right: 0.5rem">普通 </span><span> 超级</span></div>
+    </div>
+    <div class="normalGossip">
+        <form class="form card">
+            <div class="card_header">
+                <svg t="1676361405501" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11561" width="24" height="24"><path d="M682.666667 245.333333a10.666667 10.666667 0 0 0 10.666666 10.666667h189.913334c-0.913333-1.066667-1.86-2.12-2.866667-3.126667L685.793333 58.286667c-1.006667-1.006667-2.06-1.953333-3.126666-2.866667z" fill="#7878bd" p-id="11562"></path><path d="M640 245.333333V42.666667H181.333333a53.393333 53.393333 0 0 0-53.333333 53.333333v832a53.393333 53.393333 0 0 0 53.333333 53.333333h661.333334a53.393333 53.393333 0 0 0 53.333333-53.333333V298.666667h-202.666667a53.393333 53.393333 0 0 1-53.333333-53.333334z m-320 10.666667h170.666667a21.333333 21.333333 0 0 1 0 42.666667H320a21.333333 21.333333 0 0 1 0-42.666667z m384 512H320a21.333333 21.333333 0 0 1 0-42.666667h384a21.333333 21.333333 0 0 1 0 42.666667z m21.333333-234.666667a21.333333 21.333333 0 0 1-21.333333 21.333334H320a21.333333 21.333333 0 0 1 0-42.666667h384a21.333333 21.333333 0 0 1 21.333333 21.333333z" fill="#7878bd" p-id="11563"></path></svg>
+                <h1 class="form_heading">谨 言</h1>
+            </div>
+            <div class="field">
+                <textarea id="postText" class="textInput" name="post_text" type="text" placeholder="我会将思念埋藏心里，直到夜晚来临……" ></textarea>
+            </div>
+            <div class="field"style="display: flex;">
+                <div class="addImgBtnWrap">
+                    <button id="normalImgBtn" class="icon-btn add-btn" type="button">
+                        <div class="add-icon"></div>
+                        <div class="btn-txt">添加图片</div>
+                    </button>
+                </div>
+                <div id="preview" style="margin-left: 5px;display: flex;"></div>
+            </div>
+            <div class="field" style="text-align: center;">
+                <button class="sendBtn" type="button">发布</button>
+            </div>
+        </form>
+    </div>
+    <div class="superGossip">
+        <div class="login-box">
+        <form>
+            <div class="user-box">
+                <input required="" name="" type="text" id="reciverInput">
+                <label>接收人</label>
+            </div>
+            <div class="bodyInfoWrap">
+                <div class="superImg" onclick="imgClick()">
+                    <input type="file" id="image-upload" style="display:none;">
+                    <span id="image-span">选择图片</span>
+                    <img id="image-preview" style="display:none;">
+                </div>
+                <div class="selectThemWrap">
+                    <ul>
+                        <li><h2>选择主题</h2></li>
+                    </ul>
+
+                    <div>
+                        <input type="radio" name="theme" id="huaRadio" value="huashu">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-huashu"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <input type="radio" name="theme" id="aixinRadio" value="xiangsu_aixin">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-xiangsu_aixin"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <input type="radio" name="theme" id="dangaoRadio" value="dangao">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-dangao"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <input type="radio" name="theme" id="siyecaoRadio" value="siyecao" checked>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-siyecao"></use>
+                        </svg>
+                    </div>
+                    <div>
+                        <input type="radio" name="theme" id="lihuaRadio" value="lihua">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-lihua"></use>
+                        </svg>
+                    </div>
+
+
+                </div>
+            </div>
+            <center>
+            <a href="javascript:sendVipPost()">
+                SEND
+                <span></span>
+            </a></center>
+        </form>
+
+    </div>
+    </div>
+</div>
+<input type="file" id="img_input" accept="image/gif,image/jpeg,image/jpg,image/png" style="visibility: hidden" multiple/>
+</body>
+<script>
+    /* 帖子模式切换 */
+    let toggleBtn = document.getElementById('toggleBtn')
+    let superGossip = document.getElementsByClassName('superGossip')[0]
+    let normalGossip = document.getElementsByClassName('normalGossip')[0]
+    let counter = 1
+
+    toggleBtn.onclick = function (){
+        counter += 1
+        if( counter%2 === 0){
+            normalGossip.style.display = 'none'
+            superGossip.style.display = 'block'
+        } else {
+            superGossip.style.display = 'none'
+            normalGossip.style.display = 'block'
+        }
+    }
+
+    /*图片上传回显*/
+    let normalImgBtn = document.getElementById('normalImgBtn')
+    let img_input = document.getElementById('img_input')
+    // let addImgBtnWrap =document.getElementsByClassName('addImgBtnWrap')[0]
+    normalImgBtn.onclick = function (){
+        img_input.click()
+    }
+
+    // //文件选中后，缩略图显示
+    // img_input.addEventListener("change", function() {
+    //     let width = addImgBtnWrap.offsetWidth + 10;
+    //     addImgBtnWrap.style.transform = "translateX(" + width + "px)";
+    // });
+
+    //详情图片缩略显示
+    let preview = document.getElementById('preview');
+    img_input.addEventListener('change', () => {
+        preview.innerHTML = '';
+        let files = img_input.files;
+
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let reader = new FileReader();
+
+            reader.addEventListener('load', () => {
+                const image = new Image();
+                image.src = reader.result;
+                image.style = 'width:100px;height:100px;'
+
+                // 创建带有删除按钮的预览元素
+                const previewItem = document.createElement('div');
+                previewItem.classList.add('preview-item');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.innerHTML = '×';
+
+                // 点击删除按钮时，从预览中移除该元素
+                deleteButton.addEventListener('click', () => {
+                    preview.removeChild(previewItem);
+                });
+
+                previewItem.appendChild(image);
+                previewItem.appendChild(deleteButton);
+                preview.appendChild(previewItem);
+            });
+
+            reader.readAsDataURL(file);
+        }
+    })
+
+    /*发送普通贴*/
+    let sendBtn = document.getElementsByClassName('sendBtn')[0]
+    sendBtn.onclick = function (){
+        let post_text = document.getElementById('postText').value;
+        let formdata = new FormData()
+        let imgFiles = img_input.files;
+        let token = localStorage.getItem("userToken")
+        //图片文件8张数量限制
+        if( imgFiles.length>8){
+            alert("最多上传8张图片哦")
+        } else if(token == null) {
+            // 未登录
+            window.location.replace("/user/login")
+        } else {
+            for( let i=0;i<imgFiles.length;i++){
+                formdata.append('post_img',imgFiles[i]);
+            }
+            formdata.append('post_text',post_text);
+            //禁止空值请求
+            if( formdata.getAll('post_img') == null && formdata.getAll('post_text') == null){
+                alert('请至少填写一项帖子内容')
+            } else {
+                //帖子发布请求
+                axios({
+                    method:'post',
+                    url:'/gossipwall/addGossipPost',
+                    transformRequest: [function(data, headers){
+                        delete headers['Content-Type']
+                        return data
+                    }],
+                    headers:{'userToken' : token},
+                    data: formdata
+                }) .then(function (response){
+                    if( response.data.code === '001' ){
+                        alert("发布成功！（确定后关闭此页面）")
+                        window.close()
+                    } else if (response.data.data === '用户查询失败'){
+                        window.location.replace("/user/login")
+                    } else {
+                        alert("发布失败")
+                    }
+                });
+            }
+        }
+    }
+
+
+        //超级贴缩略图
+        let imageUpload = document.getElementById('image-upload');
+        let imagePreview = document.getElementById('image-preview');
+        let imageSpan = document.getElementById('image-span');
+
+        function imgClick(){
+            imageUpload.click();
+        }
+
+        imageUpload.addEventListener('change', function() {
+            let file = this.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function() {
+                    imagePreview.src = reader.result;
+                    imagePreview.style.display = 'block';
+                    imageSpan.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function sendVipPost(){
+            let reciverName = document.getElementById('reciverInput').value
+            let img = imageUpload.files[0]
+            let theme = document.getElementsByName('theme')
+            let radioValue = null
+            let token = localStorage.getItem("userToken")
+            for ( let i = 0; i < theme.length; i++ ){
+                if( theme[i].checked ){
+                    radioValue = theme[i].value
+                }
+            }
+            let formdata = new FormData()
+            formdata.append('reciver', reciverName)
+            formdata.append('img', img)
+            formdata.append('radio', radioValue)
+            axios({
+                method: 'post',
+                url: '/gossipwall/addVipPost',
+                transformRequest: [function(data, headers){
+                    delete headers['Content-Type']
+                    return data
+                }],
+                headers:{'userToken' : token},
+                data: formdata
+            }).then(function (response) {
+                if( response.data.code === '001' ){
+                    alert("发布成功！（确定后关闭此页面）")
+                    window.close()
+                } else if (response.data.data === '用户查询失败'){
+                    window.location.replace("/user/login")
+                } else {
+                    alert("发布失败")
+                }
+            });
+        }
+
+
+</script>
+</html>

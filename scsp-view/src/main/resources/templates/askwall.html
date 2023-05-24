@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/askwall.css" rel="stylesheet">
+    <link href="/css/myinfo_base.css" rel="stylesheet">
+    <link href="/css/gossipwall.css" rel="stylesheet">
+
+    <script src="/js/axios.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
+    <title>灵颖校园--程门</title>
+
+</head>
+<body>
+    <!-- 通用头部导航栏 -->
+    <div th:replace="head::head"></div>
+    <!-- 学科类别 -->
+    <div class="subjectCategoryWrap">
+        <div class="subjectCategory">
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+            <div class="subject"></div>
+        </div>
+    </div>
+    <!-- 求知墙主体 -->
+    <div class="mainWrap">
+        <div class="addBtnWrap">
+            <button id="addBtn" data-bs-toggle="modal" data-bs-target="#addAnwserModal">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 发 帖
+            </button>
+        </div>
+        <div class="main">
+            <div class="askPostList">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                Accordion Item #1
+                                <span class="badge rounded-pill text-bg-success" style="left: 55%;position: sticky;">20</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                            </div>
+                            <div class="accordion-body">
+                                <img class="postImg" src="/img/yu.PNG" data-bs-toggle="modal" data-bs-target="#postImgModal">
+                                <img class="postImg" data-bs-toggle="modal" data-bs-target="#postImgModal">
+                            </div>
+                            <div class="accordion-body">
+                                <div>采纳回答</div>
+                            </div>
+                            <div class="accordion-body">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#allAnswerModal">全部回答</button>
+                                    <button type="button" class="btn btn-outline-success">我来解答</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                Accordion Item #2
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                Accordion Item #3
+                            </button>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图片详情模态 -->
+                <div class="modal fade" id="postImgModal" tabindex="-1" aria-labelledby="postImgModal" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 50rem;">
+                        <div class="modal-content" style="background-color: #fff0;border: 0;">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute;right:0;background: #ffffff85 var(--bs-btn-close-bg) center/1em auto no-repeat;"></button>
+                            <img id="modalImg" src="/img/yu.PNG" class="bigSingleImg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 发帖模态 -->
+                <div class="modal fade" id="addAnwserModal" tabindex="-1" aria-labelledby="answerModal" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-4" style="margin: 0 auto;">发布问答</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭" style="margin: unset"></button>
+                            </div>
+                            <div class="modal-body" style="padding: unset;">
+                                <div class="addBody">
+
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-8" style="margin-top: 2rem;">
+                                                <form id="askForm">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control" id="askTitle" placeholder="帖子标题">
+                                                        <label for="askTitle">帖子标题</label>
+                                                    </div>
+                                                    <div class="form-floating mb-3">
+                                                        <select class="form-select" id="askCategory" aria-label="Floating label select example">
+                                                            <option selected>打开学科列表</option>
+                                                            <option value="1">One</option>
+                                                            <option value="2">Two</option>
+                                                            <option value="3">Three</option>
+                                                        </select>
+                                                        <label for="askCategory">选择问题的学科类别</label>
+                                                    </div>
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" class="form-control" id="bonus" placeholder="问题积分悬赏">
+                                                        <label for="bonus">积分悬赏</label>
+                                                    </div>
+                                                    <div class="form-floating mb-3">
+                                                        <textarea class="form-control" placeholder="问题内容" id="askContent" style="height: 100px"></textarea>
+                                                        <label for="askContent">问题内容</label>
+                                                    </div>
+
+                                                    <div class="form-group" style="margin-top: 2rem">
+                                                        <label for="goodImgFileInput" style="margin-bottom: 0.5rem">上传图片（最多5张，按住ctrl多选）</label>
+                                                        <div class="custom-file">
+                                                            <input class="form-control" type="file" multiple id="goodImgFileInput" accept="image/gif,image/jpeg,image/jpg,image/png">
+                                                        </div>
+                                                        <div id="thumbnail-container" class="mt-3"></div>
+                                                    </div>
+                                                    <div id="preview" style="display: flex"></div>
+                                                    <button id="submitGoodBtn" type="submit" class="btn btn-primary" style="margin-top: 5rem;width: 10rem">确认发布</button>
+
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 全部回复模态 -->
+                <div class="modal fade" id="allAnswerModal" tabindex="-1" aria-labelledby="answerModal" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-4" >全部回答</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                            </div>
+                            <div class="modal-body"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分页 -->
+                <nav style="top: 60rem;left: 23%;position: absolute;">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <li class="page-item"><a class="page-link" href="#">11</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+
+
+
+
+
+            <div class="successStone">
+                <div class="stoneTitle">淡墨榜</div>
+                <div class="stoneImgWrap">
+                    <ul>
+                        <li>启明星辰</li>
+                        <li>用户a</li>
+                        <li>用户b</li>
+                        <li>用户c</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    //获取token
+    let token = localStorage.getItem('userToken')
+
+    let formData = new FormData();
+    //详情图片缩略显示
+    const fileInput = document.getElementById('goodImgFileInput');
+    const preview = document.getElementById('preview');
+    fileInput.addEventListener('change', () => {
+        preview.innerHTML = '';
+        const files = fileInput.files;
+
+        for(let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            formData.append('imgList',file)
+
+            reader.addEventListener('load', () => {
+                const image = new Image();
+                image.src = reader.result;
+                image.style = 'width:5rem;height:5rem;'
+
+                // 创建带有删除按钮的预览元素
+                const previewItem = document.createElement('div');
+                previewItem.classList.add('preview-item');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.innerHTML = '×';
+
+                // 点击删除按钮时，从预览中移除该元素
+                deleteButton.addEventListener('click', () => {
+                    preview.removeChild(previewItem);
+                });
+
+                previewItem.appendChild(image);
+                previewItem.appendChild(deleteButton);
+                preview.appendChild(previewItem);
+            });
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    //获取表单数据
+    let askTitle = document.getElementById('askTitle')
+    let askCategory = document.getElementById('askCategory')
+    let askBonus = document.getElementById('bonus')
+    let askContent = document.getElementById('askContent')
+
+    //处理表单数据
+    submitGoodBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        // 处理表单数据
+
+        let bool = (askTitle.value != null && askCategory.value != null
+            && askContent.value != null)
+        //上传参数全不为空
+        if (bool) {
+            formData.append('good_name', askTitle.value)
+            formData.append('category_id', askCategory.value)
+            formData.append('coverimg', askBonus.value)
+            formData.append('good_price', askContent.value)
+            //发布问题请求
+            axios({
+                method: 'post',
+                url: '/askwall/addAsk',
+                transformRequest: [function (data, headers) {
+                    delete headers['Content-Type']
+                    return data
+                }],
+                data: formData,
+                headers: {'userToken': token}
+            }).then(function (response) {
+                if (response.data.code === '001') {
+                    closeCanvasBtn.click()
+                    document.getElementById('askForm').reset();
+                    document.getElementById('preview').remove()
+                    alert('商品发布成功！')
+                }
+            });
+        }
+    })
+
+</script>
+</html>
+
+<!-- <div class="confessItemWrap">
+    <div class="item">
+        <div class="speaker">
+            <div class="headImg">
+                <img src="../static/img/yu.PNG" />
+            </div>
+            <div class="speakerInfo">
+                <span class="speakerName">发布者用户名</span>
+                <span>几月几日</span>
+            </div>
+            <div class="reward">
+                <span>10分</span>
+            </div>
+        </div>
+        <div class="speakInfo">
+            <div class="wordArea">
+                <span>发布内容</span>
+            </div>
+            <div class="imgArea">
+                <img src="/img/yu.PNG" />
+                <img src="/img/yu.PNG" />
+                <img src="/img/yu.PNG" />
+                <img src="/img/yu.PNG" />
+                <img src="/img/yu.PNG" />
+                <img src="/img/yu.PNG" />
+            </div>
+        </div>
+        <div class="funcArea">
+            <span></span>
+            <div>
+                <span>点赞图标</span>
+                <span>评论图标</span>
+            </div>
+        </div>
+        <div class="commentsArea">
+            <ul class="commentsUl">
+                <li>
+                    <span class="commentSpeaker">用户A</span>
+                    <span>：</span>
+                    <span>百年好合</span>
+                </li>
+                <li>
+                    <span class="commentSpeaker">用户A</span>
+                    <span>：</span>
+                    <span>百年好合</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="item">
+        <div class="speaker">
+            <div class="headImg">
+                <img src="../static/img/yu.PNG" />
+            </div>
+            <div class="speakerInfo">
+                <span class="speakerName">发布者用户名</span>
+                <span>几月几日</span>
+            </div>
+        </div>
+        <div class="speakInfo">
+            <div class="wordArea">
+                <span>发布内容</span>
+            </div>
+            <div class="imgArea">
+                <img src="../static/img/yu.PNG" />
+                <img src="../static/img/yu.PNG" />
+                <img src="../static/img/yu.PNG" />
+                <img src="../static/img/yu.PNG" />
+                <img src="../static/img/yu.PNG" />
+                <img src="../static/img/yu.PNG" />
+            </div>
+        </div>
+        <div class="funcArea">
+            <span></span>
+            <div>
+                <span>点赞图标</span>
+                <span>评论图标</span>
+            </div>
+        </div>
+        <div class="commentsArea">
+            <ul class="commentsUl">
+                <li>
+                    <span class="commentSpeaker">用户A</span>
+                    <span>：</span>
+                    <span>百年好合</span>
+                </li>
+                <li>
+                    <span class="commentSpeaker">用户A</span>
+                    <span>：</span>
+                    <span>百年好合</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> -->

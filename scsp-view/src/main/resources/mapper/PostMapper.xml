@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.beardestiny.scsp.mapper.PostMapper">
+    <insert id="addGossipPost">
+        insert into gossip_post(post_id,publisher_userid,post_text,post_img,create_time) values (#{post_id}, #{publisher_userid}, #{post_text}, #{post_img}, #{create_time})
+    </insert>
+
+    <select id="getGossipWallItem" resultType="cn.beardestiny.scsp.entity.viewEntity.GossipWallItem">
+        select gp.publisher_userid, u.user_nickname as publisher_nickname, u.user_headImg as publisher_headImg, gp.create_time, gp.post_text, gp.post_img, count(gplike.post_id) as post_likeNum, group_concat(concat_ws('：',u2.user_nickname,gpcom.comment_content))as comment_content
+        from gossip_post gp
+                 left join gossippost_comment gpcom on gp.post_id = gpcom.post_id
+                 left join gossippost_like gplike on gp.post_id = gplike.post_id
+                 left join user u on gp.publisher_userid = u.user_id
+                 left join user u2 on gpcom.commenter_userid = u2.user_id
+        group by gp.post_id
+            limit #{pageNum},5
+    </select>
+</mapper>

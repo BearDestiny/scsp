@@ -1,0 +1,206 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.icon {
+    display: inline-block;
+    width: 1.8rem;
+    height: 1.8rem;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.icon:hover {
+    cursor: pointer;
+}
+
+.aligndiv{
+    height: 3.8rem;
+    width: 100%;
+}
+
+.mainWrap{
+    height: auto;
+    width: 100%;
+}
+
+.main{
+    height: auto;
+    width: 60%;
+    margin: 5rem auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confessItemWrap{
+    height: auto;
+    width: 60%;
+    background-color: white;
+    border-radius: 10px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.item{
+    height: auto;
+    width: 100%;
+    padding-bottom: 2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid gray;
+}
+
+.speaker{
+    height: 4.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.headImg{
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+}
+
+.headImg img{
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+}
+
+.speakerInfo{
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    white-space: nowrap;
+}
+
+.speakerName{
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.speakInfo{
+    height: auto;
+    width: 100%;
+    margin: 0.5rem auto;
+}
+
+.wordArea{
+    height: auto;
+    width: 100%;
+}
+
+.wordArea span{
+    display: inline-block;
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+}
+
+.imgArea{
+    height: auto;
+    width: 100%;
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.imgArea img{
+    height: 10rem;
+    width: 10rem;
+    margin-right: 1px;
+    margin-bottom: 1px;
+}
+
+.funcArea{
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.commentsAreaP{
+    height: auto;
+    width: 100%;
+}
+
+.commentsUl{
+    list-style-type: none;
+}
+
+.commentSpeaker{
+    font-weight: 600;
+}
+
+
+.successStone{
+    height: auto;
+    width: 30%;
+}
+
+.stoneTitle{
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.5rem;
+    color: #ff2e63;
+}
+
+.stoneImgWrap ul{
+    list-style-type: none;
+}
+
+.stoneImgWrap li{
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.stoneImgWrap img{
+    height: auto;
+    width: 10rem;
+    border-radius: 10%;
+}
+
+.addBtnWrap{
+    position: fixed;
+    right: 90%;
+}
+
+.addBtnWrap button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #7e97b8;
+    background-color: #e0e8ef;
+    border-style: solid;
+    border-width: 2px 2px 2px 2px;
+    border-color: rgba(255, 255, 255, 0.333);
+    border-radius: 40px 40px 40px 40px;
+    padding: 16px 24px 16px 28px;
+    transform: translate(0px, 0px) rotate(0deg);
+    transition: 0.2s;
+    box-shadow: -4px -2px 16px 0px #ffffff, 4px 2px 16px 0px rgb(95 157 231 / 48%);
+}
+
+.addBtnWrap button:hover {
+    color: #516d91;
+    background-color: #E5EDF5;
+    box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgb(95 157 231 / 48%);
+    cursor: pointer;
+}
+
+.addBtnWrap button:active {
+    box-shadow: none;
+}

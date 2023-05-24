@@ -1,0 +1,26 @@
+<div class="imgAndName">
+        <div class="myinfoImg">
+            <img id="myheadImg" th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/' + ${frontUser.user_headImg}"/>
+        </div>
+        <div class="myinfoName"><span th:text="${frontUser.user_nickname}">用户昵称</span></div>
+</div>
+<div class="epiAndPoint">
+        <div style="margin-right: 3rem;">
+            <span style="font-weight: 600">称号：</span>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-info dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        th:text="${frontUser.achi_using}==null? '无' : ${frontUser.achi_using}"
+                        style="font-weight: 600">
+                    Action
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" th:each="pub : ${frontUser.pubname_value}" th:text="${pub}">Action</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="margin-right: 3rem;">
+            <span style="font-weight: 600">校币：</span>
+            <span id="currency" th:text="${frontUser.user_currency}==null? 0 : ${frontUser.user_currency}" style="color: #198754;font-weight: 600;font-size: 1.2rem;"></span></div>
+    </div>

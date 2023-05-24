@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/myinfo_base.css" rel="stylesheet">
+    <link href="/css/myinfo_left.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+<!--    <link href="/css/myinfo_deal.css" rel="stylesheet">-->
+
+
+    <script src="/js/axios.js"></script>
+    <script src="/bootstrap/js/bootstrap.bundle.js"></script>
+
+    <title>灵颖校园--我</title>
+</head>
+<body style="background-color: #eef3f7;">
+<!-- 通用头部导航栏 -->
+<div th:replace="head::head"></div>
+<!-- 广告位 -->
+<div class="ads">广告</div>
+<!-- 个人资料 -->
+<div class="myInfoWrap">
+    <!-- 通用侧边栏 -->
+    <div class="infoBtnWrap" style="height: auto;">
+        <div id="infoBtn" class="infoBtn">
+            <div class="btnItem">
+                <button class="leftBtn leftBtnActive">江湖声名</button>
+            </div>
+            <div class="btnItem">
+                <button class="leftBtn">人际往来</button>
+            </div>
+            <div class="btnItem">
+                <button id="myDealBtn" class="leftBtn">交易买卖</button>
+            </div>
+            <div class="btnItem">
+                <button class="leftBtn">知识问答</button>
+            </div>
+        </div>
+    </div>
+    <div id="rightInfoWrap" class="rightInfoWrap">
+        <!-- 江湖声名 -->
+        <div id="personInfo" class="infoWrap myactive">
+            <div class="myinfo">
+                <div class="myinfoHead">
+                    <div class="imgAndName">
+                        <div class="myinfoImg">
+                            <img id="myheadImg" src="/img/default.jpg"/>
+                        </div>
+                        <div class="myinfoName"><span>用户名</span></div>
+                    </div>
+                    <div class="epiAndPoint">
+                        <div style="margin-right: 3rem;">
+                            <span>称号：</span>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-info dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    无
+                                </button>
+                                <ul class="dropdown-menu">
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="margin-right: 3rem;">
+                            <span>校币：</span>
+                            <span id="currency">0</span></div>
+                    </div>
+                </div>
+                <div class="myinfoBody">
+                    <div class="accordion accordion-flush" id="accordion1">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button accorditionBtn" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne" aria-expanded="true"
+                                        aria-controls="flush-collapseOne">
+                                    我的信息
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse show"
+                                 aria-labelledby="flush-headingOne">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-sm-3 mb-3">
+                                            <div class="card">
+                                                <div id="infoPhone" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">手机号</h6>
+                                                    <p id="infoPhoneP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div id="infoQQ" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">QQ号</h6>
+                                                    <p id="infoQQP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div id="infoWechat" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">微信号</h6>
+                                                    <p id="infoWechatP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div id="infoOther" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">其它联系方式</h6>
+                                                    <p id="infoOtherP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mb-3">
+                                            <div class="card">
+                                                <div id="infoSno" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">学号</h6>
+                                                    <p id="infoSnoP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div id="infoZY" class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">专业</h6>
+                                                    <p id="infoZYP" class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">校职认证</h6>
+                                                    <p class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success disabled updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        认证
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="card">
+                                                <div class="card-body" style="padding: 0.5rem 0.5rem;">
+                                                    <h6 class="card-title">社团认证</h6>
+                                                    <p class="card-text"></p>
+                                                    <button type="button" class="btn btn-outline-success disabled updateBtn"
+                                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#infoUpdateModal">
+                                                        认证
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingTwo">
+                                <button class="accordion-button accorditionBtn" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseTwo" aria-expanded="true"
+                                        aria-controls="flush-collapseTwo">
+                                    我的属性
+                                </button>
+                            </h2>
+                            <div id="flush-collapseTwo" class="accordion-collapse collapse show"
+                                 aria-labelledby="flush-headingTwo">
+                                <div class="accordion-body">
+                                    <span>名望</span>
+                                    <span>学识</span>
+                                    <span>财富</span>
+                                    <span>风流</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item"
+                             style="border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;">
+                            <h2 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button accorditionBtn" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseThree" aria-expanded="true"
+                                        aria-controls="flush-collapseThree">
+                                    账号管理
+                                </button>
+                            </h2>
+                            <div id="flush-collapseThree" class="accordion-collapse collapse show"
+                                 aria-labelledby="flush-headingThree">
+                                <div class="accordion-body">
+                                    <div id="accountDiv" class="btn-group-vertical" role="group"
+                                         aria-label="Vertical button group">
+                                        <button type="button" class="btn btn-outline-dark">忘记密码</button>
+                                        <button type="button" class="btn btn-outline-dark">修改密码</button>
+                                        <button type="button" class="btn btn-outline-dark">修改昵称</button>
+                                        <button type="button" class="btn btn-outline-danger">注销账号</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 交易买卖 -->
+        <div id="personDeal" class="infoWrap">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="backBtn nav-link active" id="myOrderBtn" data-bs-toggle="tab"
+                            data-bs-target="#myOrder" type="button" role="tab" aria-controls="nav-home"
+                            aria-selected="true">我的订单
+                    </button>
+                    <button class="backBtn nav-link" id="myGoodBtn" data-bs-toggle="tab"
+                            data-bs-target="#myGood" type="button" role="tab" aria-controls="nav-profile"
+                            aria-selected="false">我的商品
+                    </button>
+                    <button class="backBtn nav-link" id="nav-contact-tab" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" type="button" role="tab" aria-controls="nav-contact"
+                            aria-selected="false">发布商品
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="myOrder" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                    <div class="orderWrap">
+                        <div class="orderInfoWrap">
+                            <div class="orderTitle">
+                                <div style="width: 40%;"><span>物品</span></div>
+                                <div style="width: 15%;"><span>单价</span></div>
+                                <div style="width: 15%;"><span>数量</span></div>
+                                <div style="width: 15%;"><span>卖家</span></div>
+                                <div style="width: 15%;"><span>状态</span></div>
+                            </div>
+                            <div class="orderItemWrap">
+                                <div class="orderItem">
+                                    <div class="orderNum">
+                                        <div style="width:25%"><span style="margin-left: 0.5rem;">时间</span></div>
+                                        <div style="width:70%"><span>订单号：</span><span>123</span></div>
+                                        <div style="width:5%"><span style="color:#ee0000;font-weight: 600;">删除</span></div>
+                                    </div>
+                                    <div class="orderInfo">
+                                        <div style="height:100%;width: 13%;"><img style="height: 100%;width: 100%;"
+                                                                                  src="/img/yu.PNG"/></div>
+                                        <div style="width: 27%;padding: 0.5rem"><span>商品描述</span></div>
+                                        <div class="orderInfoPosition"><span>￥</span><span>8.8</span></div>
+                                        <div class="orderInfoPosition"><span>1</span></div>
+                                        <div class="orderInfoPosition"><span>卖家名</span></div>
+                                        <div class="orderInfoPosition" style="font-weight: 600;">
+                                            <span>已完成</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="myGood" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                    <div class="orderWrap">
+                        <div class="orderInfoWrap">
+                            <div class="orderTitle">
+                                <div style="width: 40%;"><span>物品</span></div>
+                                <div style="width: 15%;"><span>单价</span></div>
+                                <div style="width: 15%;"><span>数量</span></div>
+                                <div style="width: 15%;"><span>卖家</span></div>
+                                <div style="width: 15%;"><span>状态</span></div>
+                            </div>
+                            <div class="orderItemWrap">
+                                <div class="orderItem">
+                                    <div class="orderNum">
+                                        <div style="width:25%"><span style="margin-left: 0.5rem;">时间</span></div>
+                                        <div style="width:70%"><span>订单号：</span><span>123</span></div>
+                                        <div style="width:5%"><span style="color:#ee0000;font-weight: 600;">删除</span></div>
+                                    </div>
+                                    <div class="orderInfo">
+                                        <div style="height:100%;width: 13%;"><img style="height: 100%;width: 100%;"
+                                                                                  src="/img/yu.PNG"/></div>
+                                        <div style="width: 27%;padding: 0.5rem"><span>商品描述</span></div>
+                                        <div class="orderInfoPosition"><span>￥</span><span>8.8</span></div>
+                                        <div class="orderInfoPosition"><span>1</span></div>
+                                        <div class="orderInfoPosition"><span>卖家名</span></div>
+                                        <div class="orderInfoPosition" style="font-weight: 600;">
+                                            <span>已完成</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- 商品添加区域 -->
+<form id="goodForm">
+    <div class="sellside offcanvas offcanvas-start-right" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+         aria-labelledby="staticBackdropLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="staticBackdropLabel">商品发布</h5>
+            <button id="closeCanvasBtn" type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping">商品名称</span>
+                <input id="goodNameInput" type="text" class="form-control" placeholder="例：宫廷玉液酒 宫廷 朋友聚会 ..."
+                       aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group mb-3" style="margin-top: 2rem">
+                <label class="input-group-text" for="goodCategoryInput">商品类别</label>
+                <select id="goodCategoryInput" class="form-select">
+                    <option selected>选择...</option>
+                    <option value="shuben">书本</option>
+                    <option value="tiyu">体育</option>
+                    <option value="shuma">数码</option>
+                    <option value="chuangpu">床铺</option>
+                    <option value="fuzhuang">服装</option>
+                    <option value="shoushi">首饰</option>
+                    <option value="shipin">食品</option>
+                    <option value="baihuo">百货</option>
+                    <option value="qita">其他</option>
+                </select>
+            </div>
+            <div class="input-group mb-3" style="margin-top: 2rem">
+                <label class="input-group-text" for="goodCoverInput">上传封面</label>
+                <input id="goodCoverInput" type="file" class="form-control"
+                       accept="image/gif,image/jpeg,image/jpg,image/png">
+            </div>
+            <div class="input-group mb-3" style="margin-top: 2rem">
+                <span class="input-group-text">商品价格</span>
+                <span class="input-group-text">0.00￥</span>
+                <input id="goodPriceInput" type="text" class="form-control"
+                       aria-label="Dollar amount (with dot and two decimal places)">
+            </div>
+            <div class="input-group mb-3" style="margin-top: 2rem">
+                <span class="input-group-text">库存数量</span>
+                <input id="goodNumInput" class="form-control" list="datalistOptions" placeholder="整数倍或不限量">
+                <datalist id="datalistOptions">
+                    <option value="1">
+                    <option value="2">
+                    <option value="3">
+                    <option value="不限量">
+                </datalist>
+            </div>
+            <div class="mb-3" style="margin-top: 2rem">
+                <label for="goodDetailInput" class="form-label">商品描述</label>
+                <textarea id="goodDetailInput" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-group" style="margin-top: 2rem">
+                <label for="goodImgFileInput" style="margin-bottom: 0.5rem">上传图片（最多8张，按住ctrl多选）</label>
+                <div class="custom-file">
+                    <input class="form-control" type="file" multiple id="goodImgFileInput"
+                           accept="image/gif,image/jpeg,image/jpg,image/png">
+                </div>
+                <div id="thumbnail-container" class="mt-3"></div>
+            </div>
+            <div id="preview"></div>
+            <div class="input-group" style="margin-top: 2rem;">
+                <span class="input-group-text">身份验证</span>
+                <input id="submitPhoneInput" type="text" aria-label="phone number" class="form-control"
+                       placeholder="手机号" style="width: 23%">
+                <input id="submitVerifyInput" type="text" aria-label="verify code" class="form-control"
+                       placeholder="输入验证码">
+                <button class="btn btn-outline-info">发送验证码</button>
+            </div>
+            <button id="submitGoodBtn" type="submit" class="btn btn-primary" style="margin-top: 5rem;width: 10rem">
+                确认发布
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- 信息更新Modal -->
+<div class="modal fade" id="infoUpdateModal" tabindex="-1" aria-labelledby="infoUpdateModal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="infoUpdateModalLabel">信息更新</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="infoUpdateInput" class="form-control" type="text" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button id="infoUpdateInputBtn" type="button" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div id="toastWrap" class="toast-container top-0 end-0 p-3">
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+    //用户登录状态校验
+    let toLoginHref = document.getElementById('toLoginHref');
+    let myInfo = document.getElementsByClassName('dorpdown-myinfo');
+    let homeLink = document.getElementsByClassName('link-title')[3]
+    let userToken = localStorage.getItem('userToken');
+    let thisUser = null;
+
+    //token存在，过期未知
+    if (userToken != null) {
+        axios({
+            method: 'get',
+            url: '/user/verifiedUserToken',
+            headers: {'userToken': userToken}
+        }).then(function (response) {
+            //用户已登录
+            if (response.data.code === '001') {
+                //本地更新token
+                localStorage.setItem("userToken", response.data.data[0])
+                //登录状态更改
+                homeLink.classList.add("home")
+                toLoginHref.href = '/home';
+                toLoginHref.innerText = '个人中心';
+                myInfo[0].innerText = response.data.data[1].user_account
+                //赋值用户信息
+                thisUser = response.data.data[1]
+
+                //加载myinfoHead
+                axios({
+                    method: 'get',
+                    url: '/user/front/' + response.data.data[1].user_id,
+                }).then(function (response) {
+                    let parent = document.getElementsByClassName('myinfoHead')[0]
+                    while (parent.firstChild) {
+                        parent.removeChild(parent.firstChild);
+                    }
+                    parent.innerHTML = response.data
+                });
+
+                //个人信息获取
+                axios({
+                    method: 'get',
+                    url: '/user/getUserInfo/'+ thisUser.user_id
+                }) .then(function (response) {
+                    document.getElementById('infoPhoneP').innerText = response.data.data.user_phone
+                    document.getElementById('infoQQP').innerText = response.data.data.user_qq
+                    document.getElementById('infoWechatP').innerText = response.data.data.user_wechat
+                    document.getElementById('infoSnoP').innerText = response.data.data.user_sno
+                    document.getElementById('infoOtherP').innerText = response.data.data.user_other
+                    document.getElementById('infoZYP').innerText = response.data.data.user_zy
+                });
+
+                //获取留言信息
+                axios({
+                    method: 'get',
+                    url: '/user/talk',
+                    params:{
+                        listener_id: thisUser.user_id
+                    }
+                }).then(function (response) {
+                    if( response.data.length > 0 ){
+                        document.getElementById('toastWrap').innerHTML =response.data
+                    }
+                });
+
+            } else {
+                //用户登录失效，删除旧token
+                localStorage.removeItem(userToken);
+                userToken = localStorage.getItem("userToken")
+                window.location.href = '/login'
+            }
+        });
+    }
+
+
+    //登出
+    function logout() {
+        localStorage.removeItem("userToken");
+        axios({
+            method: 'get',
+            url: '/user/logout',
+        }).then(function (response) {
+            if (response.data.code === '001') {
+                window.location.href = '/'
+            }
+        })
+    }
+
+
+    let closeCanvasBtn = document.getElementById('closeCanvasBtn');
+    let submitGoodBtn = document.getElementById('submitGoodBtn');
+
+    let formData = new FormData();
+
+    //详情图片缩略显示
+    const fileInput = document.getElementById('goodImgFileInput');
+    const preview = document.getElementById('preview');
+    fileInput.addEventListener('change', () => {
+        preview.innerHTML = '';
+        const files = fileInput.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            formData.append('imgList', file)
+
+            reader.addEventListener('load', () => {
+                const image = new Image();
+                image.src = reader.result;
+                image.style = 'width:5rem;height:5rem;'
+
+                // 创建带有删除按钮的预览元素
+                const previewItem = document.createElement('div');
+                previewItem.classList.add('preview-item');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.innerHTML = '×';
+
+                // 点击删除按钮时，从预览中移除该元素
+                deleteButton.addEventListener('click', () => {
+                    preview.removeChild(previewItem);
+                });
+
+                previewItem.appendChild(image);
+                previewItem.appendChild(deleteButton);
+                preview.appendChild(previewItem);
+            });
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    //更换头像
+    let myheadImg = document.getElementById('myheadImg')
+    myheadImg.onclick = function (){
+
+    }
+
+
+
+    //更新个人信息
+    let updateModalBtn = document.querySelectorAll('.updateBtn')
+    let infoUpdateInputBtn = document.getElementById('infoUpdateInputBtn')
+    let infoUpdateInput = document.getElementById('infoUpdateInput')
+    updateModalBtn.forEach(btn => {
+        btn.addEventListener('click', () => {
+            infoUpdateInput.setAttribute('valuefor',btn.parentNode.id)
+        });
+    });
+    infoUpdateInputBtn.onclick = function () {
+        //用户已登录
+        if( userToken != null ){
+            axios({
+                method: 'post',
+                url: '/user/updateUserInfo',
+                data:{
+                    valuefor: infoUpdateInput.getAttribute('valuefor') ,
+                    user_id: thisUser.user_id ,
+                    updateValue: infoUpdateInput.value
+                }
+            }) .then(function (response) {
+                    if( response.data.code === '001' ){
+                        alert('修改成功')
+                    }
+            });
+        } else {
+            //用户未登录
+            alert('请登录后操作')
+        }
+    }
+
+
+    //发布商品
+    let gname = document.querySelector('#goodNameInput')
+    let gcategory = document.querySelector('#goodCategoryInput')
+    let gcover = document.querySelector('#goodCoverInput')
+    let gprice = document.querySelector('#goodPriceInput')
+    let gnum = document.querySelector('#goodNumInput')
+    let gdetail = document.querySelector('#goodDetailInput')
+    let gphone = document.querySelector('#submitPhoneInput')
+    let gverify = document.querySelector('#submitVerifyInput')
+
+    submitGoodBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        // 处理表单数据
+
+        let bool = (gname.value != null && gcategory.value != null && gcover.value != null
+            && gprice.value != null && gnum.value != null && gdetail.value != null
+            && gphone.value != null && gverify.value != null)
+        //上传参数全不为空
+        if (bool) {
+            formData.append('good_name', gname.value)
+            formData.append('category_id', gcategory.value)
+            formData.append('coverimg', gcover.files[0])
+            formData.append('good_price', gprice.value)
+            formData.append('good_num', gnum.value)
+            formData.append('good_detail', gdetail.value)
+            formData.append('submit_phone', gphone.value)
+            formData.append('submit_verifyCode', gverify.value)
+            console.log(gcover.files)
+            //发布商品请求
+            axios({
+                method: 'post',
+                url: '/market/addGood',
+                transformRequest: [function (data, headers) {
+                    delete headers['Content-Type']
+                    return data
+                }],
+                data: formData,
+                headers: {'userToken': userToken}
+            }).then(function (response) {
+                if (response.data.code === '001') {
+                    closeCanvasBtn.click()
+                    document.getElementById('goodForm').reset();
+                    document.getElementById('preview').remove()
+                    alert('商品发布成功！')
+                }
+            });
+        }
+    })
+
+    //左侧排他按钮
+    let leftBtn = document.querySelectorAll('.leftBtn')
+    let selectedOption = leftBtn[0];
+    leftBtn.forEach(option => {
+        option.addEventListener('click', function () {
+            let personInfo = document.getElementById('personInfo')
+            let personDeal = document.getElementById('personDeal')
+
+            if (option !== selectedOption) {
+                if (selectedOption !== null) {
+                    selectedOption.classList.remove('leftBtnActive');
+                }
+                option.classList.add('leftBtnActive');
+                selectedOption = option;
+            }
+            //点击按钮1
+            if (option === leftBtn[0]) {
+                personInfo.classList.add('myactive')
+                personDeal.classList.remove('myactive')
+            }
+            //点击按钮3
+            if (option === leftBtn[2]) {
+                personInfo.classList.remove('myactive')
+                personDeal.classList.add('myactive')
+            }
+        });
+    });
+
+
+    //我的商品列表
+    let myGoodBtn = document.getElementById('myGoodBtn')
+    myGoodBtn.onclick = function (){
+        axios({
+            method: 'get',
+            url: '/market/mygood',
+            params:{
+                uid: thisUser.user_id
+            }
+        }).then(function (response) {
+            document.getElementById('myGood').innerHTML = response.data
+        });
+    }
+
+    //我的订单列表
+    let myDealBtn = document.getElementById('myDealBtn')
+    myDealBtn.onclick = function (){
+        axios({
+            method: 'get',
+            url: '/order/get',
+            params:{
+                uid: thisUser.user_id
+            }
+        }).then(function (response) {
+            document.getElementById('myOrder').innerHTML = response.data
+        });
+    }
+
+    //已读信息
+    function readTalk(id){
+        axios({
+            method: 'get',
+            url: '/user/readTalk',
+            params:{
+                tid: id
+            }
+        })
+    }
+</script>
+
+</html>

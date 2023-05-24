@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/css/head.css" rel="stylesheet">
+    <link href="/css/market.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+<!--    <script src="/bootstrap/js/bootstrap.js"></script>-->
+    <script src="/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/js/iconfont.js"></script>
+    <script src="/js/axios.js"></script>
+
+    <title>灵颖校园--摊货市集</title>
+</head>
+
+<body style="background-color: #eef3f7;">
+<!-- 通用头部导航栏 -->
+<div th:replace="head::head"></div>
+    <!-- 集市弹幕 -->
+    <div id="danmu-container" class="marketBulletChat">
+        <div id="danmuInputWrap" class="input-group input-group-sm mb-3">
+            <input id="damuInput" type="text" class="form-control danmu-input" placeholder="输入弹幕" style="width: 80%;">
+            <button id="danmuBtn" class="btn btn-success" type="button" style="width: 11%;white-space: nowrap;">发送</button>
+            <input id="damuColor" type="color" class="form-control form-control-color danmu-input"  value="#000000" title="选择弹幕颜色" style="width: 5%;height: 1.9rem;">
+        </div>
+    </div>
+    <!-- 集市主体 -->
+    <div class="marketMainWrap">
+        <div class="market">
+            <div class="category">
+                <span onclick="categorySearch('shuben')">书本</span>
+                <span onclick="categorySearch('tiyu')">体育</span>
+                <span onclick="categorySearch('shuma')">数码</span>
+                <span onclick="categorySearch('chuangpu')">床铺</span>
+                <span onclick="categorySearch('fuzhuang')">服装</span>
+                <span onclick="categorySearch('shoushi')">首饰</span>
+                <span onclick="categorySearch('shipin')">食品</span>
+                <span onclick="categorySearch('baihuo')">百货</span>
+                <span onclick="categorySearch('qita')">其它</span>
+            </div>
+            <div class="vipGoods">
+                <div class="goodsImg">
+                    <div id="goodsCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button th:each="item,loop : ${carouselList}" type="button" data-bs-target="#goodsCarousel" th:data-bs-slide-to="${loop.index}" th:class="${loop.index}==0? 'active' : ' '" aria-current="true" th:aria-label="'Slide '+${loop.count}"></button>
+                        </div>
+                        <div class="carousel-inner" style="border-radius: 1.2rem;">
+                            <div th:each="item,loop : ${carouselList}" th:class="${loop.index}==0? 'carousel-item active' : 'carousel-item' " data-bs-interval="5000">
+                            <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/' + ${item.cover_img}" th:onclick="toGoodPage([[${item.good_id}]])">
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#goodsCarousel" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#goodsCarousel" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="userInfoWrap">
+                <div class="user">
+                    <div class="uerImg">
+                        <img id="headImg" src="/img/default.jpg" />
+                    </div>
+                    <div class="userName">
+                        <span id="nickname">游客</span>
+                    </div>
+                    <div class="userButton">
+                        <button id="loginBtn" type="button" class="btn btn-primary" style="display:inline-block; --bs-btn-padding-x: 2rem; ">登 录</button>
+                    </div>
+                    <div class="userButton">
+                        <button id="sellBtn" type="button" class="btn btn-outline-danger" style="display:none;">摆 摊</button>
+                    </div>
+                    <div  id="collectBtn" class="userButton" style="display:none;" title="收藏">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-shoucangjia"></use>
+                        </svg>
+                    </div>
+                    <div id="historyBtn" class="userButton" style="display:none;" title="足迹">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-zuji"></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 商品卡片 -->
+    <div class="singleGoodCardWrap">
+        <div class="singleGood">
+            <div class="areaTitle">
+                <span style="margin-top: 1rem;letter-spacing: 0.4rem;">摆摊圈儿</span>
+                <div class="input-group input-group-sm mb-1 " style="width: 23%;top: 0.8rem;left: 9%;height: 1rem;">
+                    <input id="leftPrice" type="text" class="form-control" placeholder="￥" aria-label="￥" oninput="removeDecimal(event)">
+                    <span class="input-group-text">-</span>
+                    <input id="rightPrice" type="text" class="form-control" placeholder="￥" aria-label="￥" oninput="removeDecimal(event)">
+                    <label id="priceSearchIcon" class="iconWrap input-group-text">
+                        <svg class="icon" aria-hidden="true" style="width: 23px;height: 23px;">
+                            <use xlink:href="#icon-icon-sousuo"></use>
+                        </svg>
+                    </label>
+                </div>
+                <div class="btn-group">
+                    <button id="orderBtn" type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="right: 60%;height: 2rem;top: 0.8rem;">
+                        最新上架
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a id="order1" class="dropdown-item" href="javascript:getOrderIndex('order1')" >最新上架</a></li>
+                        <li><a id="order2" class="dropdown-item" href="javascript:getOrderIndex('order2')" >价格升序</a></li>
+                        <li><a id="order3" class="dropdown-item" href="javascript:getOrderIndex('order3')" >价格降序</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="cardArea">
+                <div id="goodItemList" class="row row-cols-5 g-2" style="width: 100%">
+                    <div class="col goodItem" style="margin-top: 1.2rem" th:each="goodItem:${goodList}">
+                        <div th:id="${goodItem.good_id}" class="goodCardItem card h-100 " style="border: none;background-color: rgba(255,255,255,0)" onclick="toGoodPage(this.id)">
+                            <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${goodItem.cover_img}" class="card-img-top" alt="...">
+                            <div class="card-body" style="padding: 5px 3px 5px 3px;;">
+                                <p class="card-text card-word" th:text="${goodItem.good_name}">递四方速递三顿饭三顿饭三顿饭四大分卫而五打四辅.</p>
+                                <div>
+                                    <span style="color: #15be00;font-size: 18px;font-weight: 600;" th:text="'￥'+${goodItem.good_price}">￥100</span>
+                                    <span style="margin-left: 10px;color: #a5a5a5;font-size: 10px;"  th:if="${goodItem.collect_num} != 0" th:text="${goodItem.collect_num}+'人关注'">10人关注</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    var nowCateGory
+
+    //用户登录状态校验
+    let toLoginHref = document.getElementById('toLoginHref');
+    let myInfo = document.getElementsByClassName('dorpdown-myinfo');
+    let homeLink = document.getElementsByClassName('link-title')[3]
+    let userToken = localStorage.getItem('userToken');
+
+    //token存在，过期未知
+    if( userToken != null){
+        axios({
+            method: 'get',
+            url: '/user/verifiedUserToken',
+            headers: {'userToken':userToken}
+        }) .then(function (response){
+            //用户已登录
+            if( response.data.code === '001' ){
+                //本地更新token
+                localStorage.setItem("userToken",response.data.data[0])
+                //登录状态更改
+                homeLink.classList.add("home")
+                toLoginHref.href='/home';
+                toLoginHref.innerText = '个人中心';
+                myInfo[0].innerText = response.data.data[1].user_account
+
+                document.getElementById('headImg').src = response.data.data[1].user_headImg
+                document.getElementById('nickname').innerHTML = response.data.data[1].user_nickname
+                document.getElementById('loginBtn').style.display = 'none'
+                document.getElementById('sellBtn').style.display = 'inline-block'
+                document.getElementById('collectBtn').style.display = 'block'
+                document.getElementById('historyBtn').style.display = 'block'
+
+            } else {
+                //用户登录失效，删除旧token
+                localStorage.removeItem(userToken);
+                userToken = localStorage.getItem("userToken")
+            }
+        });
+    }
+
+
+    //登出
+    function logout(){
+        localStorage.removeItem("userToken");
+        axios({
+            method: 'get',
+            url: '/user/logout',
+        }) .then(function (response){
+            homeLink.classList.remove("home")
+            toLoginHref.href='/login';
+            toLoginHref.innerText = '登录';
+        });
+    }
+
+    //商品名称前置搜索
+    //商品模糊搜索
+    let headSearchInput = document.getElementById('headSearchInput')
+    headSearchInput.addEventListener('keyup' , function (event) {
+        if( event.key === 'Enter'){
+            event.preventDefault()
+            //价格与排序信息重置
+            let orderBtn = document.getElementById('orderBtn')
+            orderBtn.innerHTML = '最新上架'
+            orderBtn.setAttribute("orderWay", 'order1')
+            document.getElementById('leftPrice').value = ''
+            document.getElementById('rightPrice').value = ''
+
+
+            //发起搜索
+            let likeName = headSearchInput.value
+            let goodDivList = getOrderPage(null, null, 1, 'order1', likeName, null)
+            //goodDivList为promise对象
+            goodDivList.then( (result) =>{
+                let divWrap = document.getElementById('goodItemList')
+                // 删除该节点的所有子节点
+                while (divWrap.firstChild) {
+                    divWrap.removeChild(divWrap.firstChild);
+                }
+                divWrap.innerHTML = result
+            })
+        }
+    })
+
+    //商品分类前置搜索
+    function categorySearch(category){
+        //价格与排序信息重置
+        let orderBtn = document.getElementById('orderBtn')
+        orderBtn.innerHTML = '最新上架'
+        orderBtn.setAttribute("orderWay", 'order1')
+        document.getElementById('leftPrice').value = ''
+        document.getElementById('rightPrice').value = ''
+
+        //当前分类全局变量赋值
+        nowCateGory = category
+        //获取当前分类商品
+        let goodDivList = getOrderPage(null, null, 1, 'order1', null, category)
+        //goodDivList为promise对象
+        goodDivList.then( (result) =>{
+            let divWrap = document.getElementById('goodItemList')
+            // 删除该节点的所有子节点
+            while (divWrap.firstChild) {
+                divWrap.removeChild(divWrap.firstChild);
+            }
+            divWrap.innerHTML = result
+        })
+    }
+
+    //商品排序搜索
+    function getOrderIndex(orderWay){
+        //按钮内容修改
+        let orderBtn = document.getElementById('orderBtn')
+        orderBtn.innerHTML = document.getElementById(orderWay).innerHTML
+        orderBtn.setAttribute("orderWay", orderWay)
+        //获取首页排序数据
+        let leftPrice = document.getElementById('leftPrice').value
+        let rightPrice = document.getElementById('rightPrice').value
+        let likeName = document.getElementById('headSearchInput').value
+        let category = nowCateGory
+        let goodDivList = getOrderPage(leftPrice, rightPrice, 1, orderWay, likeName ,category);
+        //goodDivList为promise对象
+        goodDivList.then( (result) =>{
+            let divWrap = document.getElementById('goodItemList')
+            // 删除该节点的所有子节点
+            while (divWrap.firstChild) {
+                divWrap.removeChild(divWrap.firstChild);
+            }
+            divWrap.innerHTML = result
+        })
+    }
+
+    //商品价格区间搜索
+    let priceSearchIcon = document.getElementById('priceSearchIcon')
+    priceSearchIcon.addEventListener('click', function() {
+        let leftPrice = document.getElementById('leftPrice').value
+        let rightPrice = document.getElementById('rightPrice').value
+        let orderWay = document.getElementById('orderBtn').getAttribute("orderWay")
+        let likeName = document.getElementById('headSearchInput').value
+        let category = nowCateGory
+        //输入左右任一栏
+        if ( leftPrice !== '' || rightPrice !== '' ){
+            if( leftPrice === '' ){
+                leftPrice = 0
+            }
+            if( rightPrice === '' ){
+                rightPrice = 0
+            }
+            let goodDivList = getOrderPage(leftPrice, rightPrice, 1, orderWay, likeName, category);
+            //goodDivList为promise对象
+            goodDivList.then( (result) =>{
+                let divWrap = document.getElementById('goodItemList')
+                // 删除该节点的所有子节点
+                while (divWrap.firstChild) {
+                    divWrap.removeChild(divWrap.firstChild);
+                }
+                divWrap.innerHTML = result
+            })
+        }
+    });
+
+
+
+
+    //商品分类分页排序
+    async function getOrderPage(leftPrice, rightPrice, pageNum, orderWay, likeName, category){
+        var div = null;
+        await axios({
+            method: 'get',
+            url: '/market/getOrderPage',
+            params:{
+                leftPrice: leftPrice,
+                rightPrice: rightPrice,
+                pageNum: pageNum,
+                orderWay: orderWay,
+                likeName: likeName,
+                category: category
+            }
+        }) .then(function (response){
+            div = response.data
+        });
+        return div;
+    }
+
+    //监听小数点
+    function removeDecimal(event) {
+        let input = event.target;
+        let value = input.value;
+        // 只允许输入数字和小数点
+        value = value.replace(/[^0-9]/g, '');
+        // 检查输入是否包含小数点
+        if (value.includes('.')) {
+            // 如果包含小数点，将其删除
+            value = value.replace('.', '');
+        }
+        // 更新输入框的值
+        input.value = value;
+    }
+
+    //跳转商品详情页
+    function toGoodPage(id){
+        window.location.href = '/good/' + id
+    }
+
+
+    //弹幕
+    let danmuContainer = document.getElementById('danmu-container');
+    let danmuTimers = [];
+
+    function loadDanmuData(callback) {
+        axios({
+            method: 'get',
+            url : '/market/getDanmu'
+        }) .then(function (response){
+            callback(response.data.data);
+        });
+    }
+
+    function createDanmu(danmuData) {
+        var danmu = document.createElement('div');
+        danmu.innerText = danmuData.danmu_text; // use data text as innerText
+        danmu.className = 'danmu-item';
+        danmu.style.color = danmuData.danmu_color; // set style according to data
+        danmu.style.fontWeight = danmuData.weight;
+        danmu.style.top = Math.floor(Math.random() * (danmuContainer.offsetHeight - 22)) + 'px';
+        danmu.style.left = danmuContainer.offsetWidth + 'px';
+        danmuContainer.appendChild(danmu);
+
+        var width = danmu.offsetWidth;
+        danmu.style.width = width + 'px';
+
+        var speed = 2; // pixels per second
+        var danmuTimer = setInterval(function() {
+            var currentPosition = parseInt(danmu.style.left);
+            if (currentPosition < -danmu.offsetWidth) {
+                clearInterval(danmuTimer);
+                danmuContainer.removeChild(danmu);
+            } else {
+                danmu.style.left = (currentPosition - speed) + 'px';
+            }
+        }, 1000 / 60); // 60 frames per second
+
+        danmu.addEventListener('mouseenter', function() {
+            clearInterval(danmuTimer);
+        });
+
+        danmu.addEventListener('mouseleave', function() {
+            danmuTimer = setInterval(function() {
+                var currentPosition = parseInt(danmu.style.left);
+                if (currentPosition < -danmu.offsetWidth) {
+                    clearInterval(danmuTimer);
+                    danmuContainer.removeChild(danmu);
+                } else {
+                    danmu.style.left = (currentPosition - speed) + 'px';
+                }
+            }, 1000 / 60); // 60 frames per second
+        });
+
+        danmuTimers.push(danmuTimer);
+    }
+
+    function initDanmu() {
+        loadDanmuData(function(data) {
+            data.forEach(function(item, index) {
+                setTimeout(() => {
+                    createDanmu(item);
+                }, 800 * index);
+            });
+        });
+    }
+
+    initDanmu();
+
+
+
+
+    window.onload = function (){
+
+        //当前页面为登录返回
+        let str = document.referrer.substring(document.referrer.length -5 , document.referrer.length)
+        if(  str === 'login' ){
+            window.location.reload()
+        }
+
+        //登录状态监听
+        let targetNode = document.getElementById('toLoginHref')
+        let observer =  new MutationObserver( () => {
+            //登录退出
+            if( targetNode.innerHTML === '登录' ){
+                document.getElementById('nickname').innerHTML = '游客'
+                document.getElementById('loginBtn').style.display = " "
+                document.getElementById('sellBtn').style.display = "none"
+                document.getElementById('headImg').src = '/img/default.jpg'
+            }
+        } );
+        observer.observe(targetNode, {childList : true})
+
+        //设置orderWay默认值
+        let orderBtn = document.getElementById('orderBtn')
+        orderBtn.setAttribute("orderWay", "order1")
+
+
+        //发弹幕
+        let danmuBtn = document.getElementById('danmuBtn')
+        danmuBtn.onclick = function (){
+            let damuInput = document.getElementById('damuInput').value
+            let danmuColor = document.getElementById('damuColor').value
+            if( damuInput !== '' ){
+                axios({
+                    method: 'post',
+                    url : '/market/addDanmu',
+                    data:{
+                        danmu_text : damuInput,
+                        danmu_color : danmuColor
+                    }
+                }) .then(function (response){
+                    if( response.data.code === '001' ){
+                        alert('发布成功');
+                    }
+                });
+            }
+        }
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,187 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.topClubWrap {
+    height: 18rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: aqua;
+}
+
+.topClub {
+    height: 15rem;
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.clubImg {
+    height: 10rem;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.clubImg span{
+    /* margin-top: 10rem; */
+    /* position: relative; */
+    /* z-index: 200; */
+}
+
+.clubWrap{
+    height: 10rem;
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.clubWrap span{
+    font-weight: 600;
+    z-index: 200;
+    margin-top: 0.4rem;
+}
+
+.club {
+    height: 8rem;
+    width: 8rem;
+    border-radius: 24px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+    box-shadow: 8px 8px 10px #a1a1a1,
+        -8px -8px 10px #ffffff;
+}
+
+.club img{
+    height: 8rem;
+    width: 8rem;
+    border-radius: 24px;
+}
+
+.club-2{
+    margin-top: 2rem;
+    z-index: 100;
+}
+
+.club-3{
+    margin-top: 3rem;
+    z-index: 100;
+}
+
+.topTable{
+    height: 5rem;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background: rgb(131,58,180);
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%); 
+}
+
+.tableHide2{
+    height: 2rem;
+    width: 33%;
+    background-color: white;
+}
+
+.tableHide3{
+    height: 3rem;
+    width: 33%;
+    background-color: white;
+}
+
+.mainWrap{
+    height: 40rem;
+    width: 100%;
+    margin-top: 3rem;
+    background-color: antiquewhite;
+}
+
+.main{
+    height: 100%;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    background-color: #cacaca;
+}
+
+.wordArea{
+    height: 100%;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.clubNews{
+    height: 60%;
+    width: 100%;
+    background-color: rgb(130, 177, 219);
+}
+
+.listTitle{
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+}
+
+.newTimeSpan{
+    position: relative;
+    float: right;
+}
+
+.clubChat{
+    height: 40%;
+    width: 100%;
+    overflow-y: scroll;
+    /* margin-top: 2rem; */
+    background-color: #a03737;
+}
+
+.clubChat ul{
+    list-style-type: none;
+}
+
+.clubChat span{
+    white-space: nowrap;
+}
+
+.cardAarea{
+    height: 100%;
+    width: 60%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.clubCard{
+    height: 100%;
+    width: 90%;
+    overflow-y: scroll;
+    background-color: #a1a1a1;
+}
+
+.clubCard img{
+    height: 8rem;
+    width: 13rem;
+    float: right;
+    position: relative;
+    /* top: 8rem; */
+}
+
+.clubCard p{
+    word-wrap: break-word;
+}
+
+.clubItem{
+    margin-bottom: 2rem;
+}

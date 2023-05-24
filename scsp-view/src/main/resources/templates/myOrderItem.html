@@ -1,0 +1,30 @@
+<div class="orderWrap">
+  <div class="orderInfoWrap">
+    <div class="orderTitle">
+      <div style="width: 40%;"><span>物品</span></div>
+      <div style="width: 15%;"><span>单价</span></div>
+      <div style="width: 15%;"><span>数量</span></div>
+      <div style="width: 15%;"><span>卖家</span></div>
+      <div style="width: 15%;"><span>状态</span></div>
+    </div>
+    <div class="orderItemWrap">
+      <div class="orderItem" th:each="item : ${orderList}">
+        <div class="orderNum">
+          <div style="width:25%"><span style="margin-left: 0.5rem;" th:text="'下单时间 ' + ${item.create_time}">时间</span></div>
+          <div style="width:70%"><span>订单号：</span><span th:text="${item.order_id}">123</span></div>
+          <div style="width:5%"><span style="color:#ee0000;font-weight: 600;">删除</span></div>
+        </div>
+        <div class="orderInfo">
+          <div style="height:100%;width: 13%;"><img style="height: 100%;width: 100%;"
+                                                    th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/' + ${item.cover_img}"/></div>
+          <div style="width: 27%;padding: 0.5rem"><span th:text="${item.good_name}">商品描述</span></div>
+          <div class="orderInfoPosition"><span>￥</span><span th:text="${item.good_price}">8.8</span></div>
+          <div class="orderInfoPosition"><span th:text="${item.buy_num}">1</span></div>
+          <div class="orderInfoPosition"><span th:text="${item.seller_nickname}">卖家名</span></div>
+          <div class="orderInfoPosition" style="font-weight: 600;">
+            <span th:text="${item.order_status}==0? '未完成' : '已完成' ">已完成</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

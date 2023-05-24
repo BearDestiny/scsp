@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+.loginWrap {
+    width: 50rem;
+    margin: 10rem auto;
+}
+
+.main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #240046;
+    max-height: 38.5rem;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 7px 7px 10px 3px #24004628;
+}
+
+.myform {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+}
+
+/*checkbox to switch from sign up to login*/
+#chk {
+    display: none;
+}
+
+/*Login*/
+.mylogin {
+    position: relative;
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+    margin-bottom: 4rem;
+}
+
+.mylogin label {
+    margin: 20% 0 5%;
+}
+
+label {
+    color: #fff;
+    font-size: 2rem;
+    justify-content: center;
+    display: flex;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+.myinput {
+    height: 2rem;
+    width: 50%;
+    background: #e0dede;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+/*Register*/
+.register {
+    background: #eee;
+    border-radius: 60% / 10%;
+    transform: translateY(5%);
+    transition: .8s ease-in-out;
+}
+
+.register label {
+    color: #573b8a;
+    transform: scale(.6);
+}
+
+#chk:checked~.register {
+    transform: translateY(-60%);
+}
+
+#chk:checked~.register label {
+    transform: scale(1);
+    margin: 10% 0 5%;
+}
+
+#chk:checked~.mylogin label {
+    transform: scale(.6);
+    margin: 5% 0 5%;
+}
+
+.account_notice{
+    position: absolute;
+    top: 13rem;
+    left: 38rem;
+    font-size: 0.8rem;
+    color: #ff3e03;
+    font-weight: bold;
+    display: none;
+}
+
+.password_notice{
+    position: absolute;
+    top: 21.3rem;
+    left: 38rem;
+    font-size: 0.8rem;
+    color: #ff3e03;
+    font-weight: bold;
+    display: none;
+}
+
+.phone_notice{
+    position: absolute;
+    top: 25.3rem;
+    left: 38rem;
+    font-size: 0.8rem;
+    color: #ff3e03;
+    font-weight: bold;
+    display: none;
+}
+
+/*Button*/
+.enterBtn {
+    margin: 0;
+}
+
+.myform .formButton {
+    width: 25%;
+    height: 40px;
+    margin: 12px auto 10%;
+    color: #fff;
+    background: #573b8a;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+}
+
+.myform .formButton:hover {
+    background-color: #6d44b8;
+}
+
+.verifAndEnter {
+    height: 2rem;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* 验证码框 */
+.verifInput-group {
+    display: flex;
+    align-items: center;
+}
+
+.verifInput {
+    height: 2rem;
+    width: 5rem;
+    padding: 10px;
+    color: #fff;
+    font-size: 15px;
+    border: 1px solid #5e4dcd;
+    border-radius: 4px 0 0 4px;
+    background-color: transparent;
+}
+
+.verifImg {
+    padding: 0.44rem;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    background-color: #5e4dcd;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color .3s ease-in-out;
+}
+
+.verifImg img {
+    height: 2.5rem;
+    width: 4rem;
+}
+
+.verifImg:hover {
+    background-color: #5e5dcd;
+}
+
+.verifInput:focus,
+.verifInput:focus-visible {
+    border-color: #3898EC;
+    outline: none;
+}
+
+.sendLink{
+    font-size: 0.9rem;
+    position: absolute;
+    bottom: 15.5rem;
+    left: 32rem;
+    text-decoration: none;
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/css/login.css" rel="stylesheet">
+
+    <script src="/js/axios.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="/js/jsencrypt.js"></script>
+
+    <title>灵颖校园</title>
+</head>
+
+<body>
+    <div class="loginWrap">
+        <div class="main">
+            <input type="checkbox" id="chk" aria-hidden="true">
+            <div class="mylogin">
+                <div class="myform">
+                    <label for="chk" aria-hidden="true">登 录</label>
+                    <input id="accountInput" class="myinput" type="text" name="user_account" placeholder="账 号">
+                    <input id="passwordInput" class="myinput" type="password" name="user_password" placeholder="密 码">
+                    <div class="verifAndEnter">
+                        <div class="verifInput-group">
+                            <input id="verifyInput" type="text" class="verifInput" name="logVerifyCode" placeholder="验证码"
+                                autocomplete="off">
+                            <div class="verifImg"><img id="verifyCodeImg"  src="/login/getVerifyCode"/></div>
+                        </div>
+                        <button id="loginBtn" class="formButton" style="margin:0 0 0 1rem;">确定</button>
+                    </div>
+                </div>
+            </div>
+            <!--      注册      -->
+            <div class="register">
+                <form class="myform" action="/user/register" method="post">
+                    <label for="chk" aria-hidden="true">注 册</label>
+                    <span class="account_notice">账号已被使用</span>
+                    <span class="password_notice">两次不一致</span>
+                    <span class="phone_notice">请输入正确手机号</span>
+                    <input class="myinput" type="text" name="user_account" placeholder="账号" required="" onchange="checkAccount(this.value)">
+                    <input class="myinput" type="password" name="user_password" placeholder="密码" required="" onchange="checkPassword(this.value)">
+                    <input class="myinput" type="password" name="user_secondPwd" placeholder="确认密码" required="" onchange="checkDoublePwd(this.value)">
+                    <input class="myinput" type="text" name="user_phone" placeholder="手机号" required="">
+                    <a class="sendLink" href="javascript:phoneVerified()">发送验证码</a>
+                    <input class="myinput" type="text" name="regVerifyCode" placeholder="验证码" required="">
+                    <button class="formButton">确定</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+
+    //更换验证码
+    let verifyCode = document.getElementsByClassName('verifImg')[0];
+    let verifyCodeImg = document.getElementById('verifyCodeImg');
+    verifyCode.onclick = function (){
+        verifyCodeImg.src="/login/getVerifyCode"+Math.random();
+    }
+
+    //RSA加密函数
+    let setSecret = new JSEncrypt();
+
+    //用户登录
+    let loginBtn = document.getElementById('loginBtn');
+    loginBtn.onclick = function (){
+        let user_account= document.getElementById('accountInput');
+        let user_password= document.getElementById('passwordInput');
+        let logVerifyCode= document.getElementById('verifyInput');
+        let notNull = user_account.value.length >0 && user_password.value.length >0 && logVerifyCode.value.length >0;
+        //前端校验
+        if( notNull ){
+            //获取公钥
+            axios({
+                method: 'get',
+                url: '/user/getLoginPublicKey'
+            }) .then(function (response){
+                //注入公钥
+                setSecret.setPublicKey(response.data);
+                //转化密文提交
+                let secretPwd = setSecret.encrypt(user_password.value);
+                let param = new URLSearchParams()
+                param.append('user_account',user_account.value)
+                param.append('user_password',secretPwd)
+                param.append('logVerifyCode',logVerifyCode.value)
+                axios({
+                    method: 'post',
+                    url: '/user/login',
+                    data: param
+                }) .then(function (response) {
+                    if( response.data.msg === '登录成功' ){
+                        localStorage.setItem("userToken", response.data.data);
+                        window.location.replace(document.referrer)
+                    } else if( response.data.msg === '账号或密码错误' ){
+                        verifyCodeImg.src="/login/getVerifyCode"+Math.random();
+                        alert("账号或密码错误")
+                    } else if ( response.data.msg === '验证码错误' ){
+                        verifyCodeImg.src="/login/getVerifyCode"+Math.random();
+                        alert("验证码错误")
+                    } else {
+                        verifyCodeImg.src="/login/getVerifyCode"+Math.random();
+                        alert("登录失败")
+                    }
+                });
+            });
+        } else {
+            //含空值
+            alert('请检查是否填写完毕')
+        }
+    }
+
+    //账号注册校验
+    function checkAccount(account){
+        let accountNoticeSpan = document.getElementsByClassName('account_notice')[0]
+        let accountInput = document.getElementsByClassName('myinput')[2]
+        let accountPattern = /^[a-zA-Z0-9]{4,16}$/
+        //规则通过
+        if (accountPattern.test(account)){
+            axios({
+                method: 'get',
+                url: '/user/check?user_account='+account
+            }) .then(function (response) {
+                if(response.data.code === '001'){
+                    accountInput.style.border = '1px solid #00ea25'
+                    accountNoticeSpan.style.display='block'
+                    accountNoticeSpan.style.color='green'
+                    accountNoticeSpan.innerHTML='账号可用'
+                } else if (response.data.msg === '账号已存在'){
+                    accountInput.style.border = '1px solid #ff3e03'
+                    accountNoticeSpan.style.display='block'
+                    accountNoticeSpan.style.color='red'
+                    accountNoticeSpan.innerHTML='账号已存在'
+                }
+            })
+        } else {
+        //规则不通过
+            accountInput.style.border = '1px solid #ff3e03'
+            accountNoticeSpan.style.display='block'
+            accountNoticeSpan.style.color='red'
+            accountNoticeSpan.innerHTML='4~16字符，大小写字母和数字'
+        }
+
+    }
+
+
+    //密码规则校验
+    function checkPassword(pwd){
+        let passwordInput = document.getElementsByClassName('myinput')[3]
+        let passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d).{8,16}$/
+        //规则通过
+        if (passwordPattern.test(pwd)){
+            passwordInput.style.border = '1px solid #00ea25'
+        } else {
+            //规则不通过
+            passwordInput.style.border = '1px solid #ff3e03'
+        }
+    }
+
+    //二次密码校验
+    function checkDoublePwd(doublePwd){
+        let passwordNotice = document.getElementsByClassName('password_notice')[0]
+        let passwordInput = document.getElementsByClassName('myinput')[3]
+        let doublePwdInput = document.getElementsByClassName('myinput')[4]
+        if(passwordInput.value === doublePwd){
+            doublePwdInput.style.border = '1px solid #00ea25'
+            passwordNotice.style.display = 'none'
+        } else {
+            doublePwdInput.style.border = '1px solid #ff3e03'
+            passwordNotice.style.display = 'block'
+        }
+    }
+
+    //手机验证码
+    function phoneVerified(){
+        let phoneInput = document.getElementsByClassName('myinput')[5]
+        let phone_notice = document.getElementsByClassName('phone_notice')[0]
+        let sendLink = document.getElementsByClassName('sendLink')[0]
+        if (phoneInput.value.length !== 11){
+            phone_notice.style.display = 'block'
+        } else {
+            phone_notice.style.display = 'none'
+            axios({
+                method: 'get',
+                url: '/user/phoneVerified?phone='+phoneInput.value
+            }) .then(function (response){
+
+            })
+            //60s再次发送验证码计时
+            let countTime = 60;
+            let verifyCount = setInterval(function(){
+                countTime --
+                sendLink.innerHTML = countTime
+                sendLink.style.left = '35rem'
+                sendLink.href = 'javascript:void()'
+                if( countTime === 0 ){
+                    countTime = 60
+                    clearInterval(verifyCount)
+                    sendLink.innerHTML = '发送验证码'
+                    sendLink.style.left = '32rem'
+                    sendLink.href = 'javascript:phoneVerified()'
+                }
+            },1000)
+        }
+    }
+</script>
+
+</html>

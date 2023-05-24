@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.subjectCategoryWrap{
+    height: 8rem;
+    width: 100%;
+    margin-top: 3rem;
+    background-color: aqua;
+}
+
+.subjectCategory{
+    height: 100%;
+    width: 30%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: azure;
+}
+
+.subject{
+    height: 90%;
+    width: 2.5rem;
+    border-radius: 0.6rem;
+    background-color: brown;
+}
+
+.askPostList{
+    width: 70%;
+}
+
+.postImg{
+    width: 3rem;
+    height: 3rem;
+}
+
+.bigSingleImg{
+    width: 50rem;
+    height: 45rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-item {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.addBody{
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #08d9d6;
+}
+
+

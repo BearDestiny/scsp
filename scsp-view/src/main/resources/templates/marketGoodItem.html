@@ -1,0 +1,12 @@
+<div class="col" style="margin-top: 1.2rem" th:each="goodItem:${goodList}">
+    <div th:id="${goodItem.good_id}" class="goodCardItem card h-100 " style="border: none;background-color: rgba(255,255,255,0)" onclick="toGoodPage(this.id)">
+        <img th:src="'http://scsp-oss.oss-cn-nanjing.aliyuncs.com/'+${goodItem.cover_img}" class="card-img-top" alt="...">
+        <div class="card-body" style="padding: 5px 3px 5px 3px;;">
+            <p class="card-text card-word" th:text="${goodItem.good_name}">递四方速递三顿饭三顿饭三顿饭四大分卫而五打四辅.</p>
+            <div>
+                <span style="color: #15be00;font-size: 18px;font-weight: 600;" th:text="'￥'+${goodItem.good_price}">￥100</span>
+                <span style="margin-left: 10px;color: #a5a5a5;font-size: 10px;"  th:if="${goodItem.collect_num} != 0" th:text="${goodItem.collect_num}+'人关注'">10人关注</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,210 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.icon {
+    width: 2.8rem;
+    height: 2.8rem;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.icon:hover{
+    cursor: pointer;
+}
+
+.iconWrap:hover{
+    cursor: pointer;
+}
+
+.marketBulletChat{
+    height: 8rem;
+    width: 100%;
+    margin: 1rem auto;
+    top: 0;
+    left: 0;
+    position: relative;
+    overflow: hidden;
+    background-color: #2bff0017;
+}
+
+.danmu-item {
+    color: black;
+    font-size: 20px;
+    position: absolute;
+    white-space: nowrap; /* prevent text from wrapping */
+}
+
+.danmu-input{
+    position: relative;
+}
+
+#danmuInputWrap{
+    width: 30%;
+    margin: 0 auto;
+    top: 6rem;
+    display: none;
+}
+
+#danmu-container:hover #danmuInputWrap{
+    width: 30%;
+    margin: 0 auto;
+    top: 6rem;
+    display: flex;
+}
+
+.marketMainWrap{
+    height: 25rem;
+    width: 100%;
+}
+
+.market{
+    height: 100%;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    background-color: #eaeaea;
+    border-radius: 12px;
+}
+
+.category{
+    height: 100%;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    color: #707070;
+    font-weight: 600;
+}
+
+.category span:hover{
+    cursor: pointer;
+    color: #198754;
+}
+
+.vipGoods{
+    height: 100%;
+    width: 60%;
+    background-color: #eef3f7;
+}
+
+.userInfoWrap{
+    height: 100%;
+    width: 25%;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.category span{
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* .category li{
+    margin-top: 1rem;
+    text-align: center;
+} */
+
+.goodsImg{
+    height: 25rem;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.vipGoods img{
+    height: 25rem;
+    width: 100%;
+    border-radius: 1.2rem;
+}
+
+.user{
+    height: 95%;
+    width: 12rem;
+    margin: 0 auto;
+}
+
+.uerImg{
+    text-align: center;
+}
+
+.uerImg img{
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+}
+
+.userName{
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.userName span{
+    margin-top: 1rem;
+}
+
+.userButton{
+    margin: 1.2rem auto;
+    text-align: center;
+}
+
+.userButton:hover{
+    cursor: pointer;
+}
+
+.colAndHis{
+    height: 4.4rem;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.singleGoodCardWrap{
+    /* height: 30rem; */
+    width: 100%;
+    margin-top: 3rem;
+}
+
+.singleGood{
+    width: 60%;
+    margin: 0 auto;
+    background-color: #eaeaea;
+    border-radius: 12px;
+    overflow:hidden;
+    padding-bottom: 2rem;
+}
+
+.areaTitle{
+    width: 90%;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-left: 3rem;
+    /*margin-top: 1rem;*/
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardArea{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap ;
+    justify-content: space-between;
+}
+
+.goodCardItem:hover{
+    box-shadow: 1px 4px 16px 10px rgba(0,0,0,0.3);
+    background-color: white !important;
+    cursor: pointer;
+}
+
+.card-word{
+    max-height: 50px;
+    letter-spacing: 1px;
+    margin-bottom: 0.6rem;
+    font: 16px/1.5 tahoma, arial, 'Hiragino Sans GB', '\5b8b\4f53', sans-serif;
+    overflow: hidden;/* 超出的文本隐藏 */
+}

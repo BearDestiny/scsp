@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>上传图片</title>
+  <style>
+    .upload-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .upload-thumbnail {
+      position: relative;
+      margin: 0.5rem;
+      width: 5rem;
+      height: 5rem;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .upload-thumbnail img {
+      width: 100%;
+      height: auto;
+    }
+
+    .delete-button {
+      position: absolute;
+      top: -0.5rem;
+      right: -0.5rem;
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background-color: #ff0000;
+      color: #fff;
+      font-size: 0.8rem;
+      line-height: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+<input id="customer-edit-goods-fileUpload" type="file" style="width:65px;" accept="image/png,image/gif,image/jpeg"
+       name="file_data[]" multiple="multiple" onchange="uploadFiles($('#customer-edit-goods-fileUpload'));"/>
+
+<fieldset>
+  <legend>预览区域</legend>
+  <div style="position: relative;" id="ccc"></div>
+</fieldset>
+
+<script>
+  function handleFiles(files) {
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      if (!file.type.match('image.*')) {
+        continue;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function (e) {
+        const thumbnailWrapper = document.createElement('div');
+        thumbnailWrapper.className = 'upload-thumbnail';
+        thumbnailContainer.appendChild(thumbnailWrapper);
+
+        const thumbnailImage = document.createElement('img');
+        thumbnailImage.src = e.target.result;
+        thumbnailWrapper.appendChild(thumbnailImage);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.innerHTML = '&times;';
+        deleteButton.addEventListener('click', function () {
+          thumbnailContainer.removeChild(thumbnailWrapper);
+        });
+        thumbnailWrapper.appendChild(deleteButton);
+      };
+    }
+  }
+
+  /* 图片上传 */
+  function uploadFiles(evt) {
+    var $this = evt;
+    var file = $this[0].files;
+    var file_length = file.length;
+
+    for (var i = 0; i < file_length; i++) {
+      var pattern_chin = /image\/\w+/;
+      var file_type = file[i].type;
+      var matchResult = file_type.match(pattern_chin);
+
+// 验证图片非空
+      if (!matchResult) {
+        message("请选择图片文件");
+        return false;
+      }
+
+// 验证图片大小
+      if (file[i].size > (3096 * 1024)) {
+        message("第 " + i + " 张图片不能大于3MB");
+        return false;
+      }
+
+      var image_url = URL.createObjectURL(file[i]);
+      var uploadScroll = '<div style="position:relative;width:inherit;height:inherit;float:left;z-index:2;width:150px;margin-left:8px;margin-right:8px;" class="imageDiv">' +
+              '<img name="loadimgs" src="'+ image_url +'" width="150"></div>';
+      $('#ccc').append(uploadScroll);
+    }
+  }
+</script>
+</body>
+</html>

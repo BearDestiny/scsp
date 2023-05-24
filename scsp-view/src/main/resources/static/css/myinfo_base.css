@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.marginleft-1rem{
+    margin-left: 1rem;
+}
+
+.ads{
+    height: 10rem;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    background-color: antiquewhite;
+}
+
+.myInfoWrap{
+    width: 60%;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.infoWrap{
+    width: 100%;
+    display: none;
+}
+
+ .myactive{
+    display: unset;
+}
+
+.myinfo{
+    width: 100%;
+}
+
+.myinfoHead{
+    height: 5rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.imgAndName{
+    display: flex;
+    align-items: center;
+}
+
+.epiAndPoint{
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.myinfoImg{
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+}
+
+.myinfoImg img{
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+}
+
+.myinfoName{
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.myinfoBody{
+    width: 100%;
+}
+
+.myinfoBody ul{
+    list-style-type: none;
+}
+
+h2 button{
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+#accountDiv button{
+    border-radius: unset;
+}
+
+.accorditionBtn{
+    border-bottom-right-radius: 50px !important;
+}
+
+.rightInfoWrap{
+    width: 80%;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #a8cbff !important;;
+}
+
+.orderTitle {
+    height: 2rem;
+    width: 100%;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+}
+
+.orderItemWrap{
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.orderItem{
+    height: 8rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(199, 246, 228);
+}
+
+.orderInfo{
+    height: 75%;
+    width: 98%;
+    font-size: 0.9rem;
+    margin: 0.2rem auto;
+    display: flex;
+}
