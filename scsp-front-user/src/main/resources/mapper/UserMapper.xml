@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.beardestiny.mapper.UserMapper">
+
+    <select id="selectFrontUser" resultMap="frontUser">
+        select tmp.user_id, tmp.user_account, tmp.user_nickname, tmp.user_headImg, up.pubname_value as achi_using ,tmp.pubname_value, tmp.user_currency
+        from
+            ( select u.user_id, u.user_account, u.user_nickname, u.user_headImg, uachi.achi_using ,up.pubname_value, u.user_currency
+              from user u
+                       left join user_achievement_have uachiHave on u.user_id = uachiHave.user_id
+                       left join user_pubname up on uachiHave.pubname_id = up.pubname_id
+                       left join user_achievement uachi on u.user_id = uachi.user_id
+              where u.user_id = #{uid} ) as tmp
+                left join user_pubname up on tmp.achi_using = up.pubname_id
+    </select>
+
+    <resultMap id="frontUser" type="FrontUser">
+        <result property="user_id" column="user_id" />
+        <result property="user_account" column="user_account" />
+        <result property="user_nickname" column="user_nickname" />
+        <result property="user_headImg" column="user_headImg" />
+        <result property="achi_using" column="achi_using" />
+        <result property="user_currency" column="user_currency" />
+        <collection property="pubname_value" javaType="ArrayList" ofType="String">
+            <result column="pubname_value" />
+        </collection>
+    </resultMap>
+
+    <update id="updateUserInfo">
+        <if test=" param.valuefor == 'infoPhone' or param.valuefor == 'infoSno' ">
+            update `user`
+            <if test=" param.valuefor == 'infoPhone' ">
+                set user_phone = #{param.updateValue}
+            </if>
+            <if test=" param.valuefor == 'infoSno' ">
+                set user_phone = #{param.updateValue}
+            </if>
+            where user_id = #{param.user_id}
+        </if>
+        <if test=" param.valuefor == 'infoQQ' or param.valuefor == 'infoWechat' or param.valuefor == 'infoOther' or param.valuefor == 'infoZY' ">
+            update `user_info`
+            <if test=" param.valuefor == 'infoQQ' ">
+                set user_qq = #{param.updateValue}
+            </if>
+            <if test=" param.valuefor == 'infoWechat' ">
+                set user_wechat = #{param.updateValue}
+            </if>
+            <if test=" param.valuefor == 'infoOther' ">
+                set user_other = #{param.updateValue}
+            </if>
+            <if test=" param.valuefor == 'infoZY' ">
+                set user_zy = #{param.updateValue}
+            </if>
+            where user_id = #{param.user_id}
+        </if>
+    </update>
+
+</mapper>

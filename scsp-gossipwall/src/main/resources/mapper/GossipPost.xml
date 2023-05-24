@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.beardestiny.mapper.GossipPostMapper">
+
+    <select id="selectGossipPostItemsByPage" resultMap="postMap">
+        select tmp.post_id, tmp.user_id, tmp.user_nickname, tmp.user_headImg,  tmp.create_time, tmp.post_text, tmp.post_img, tmp.post_like, tmp.commenter_id,
+               u.user_nickname as commenter_nickname
+                , tmp.comment_content, tmp.comment_time from
+            (select gp.post_id, u.user_id, u.user_nickname, u.user_headImg,  gp.create_time, gp.post_text, gpi.post_img, gp.post_like,
+                    gpc.user_id as commenter_id
+                     , gpc.comment_content, gpc.create_time as comment_time
+             from gossip_post gp
+                      left join user u on u.user_id = gp.user_id
+                      left join gossippost_img gpi on gpi.post_id = gp.post_id
+                      left join gossippost_comment gpc on gpc.post_id = gp.post_id
+            ) as tmp
+                left join user u on tmp.commenter_id = u.user_id
+        order by gp.create_time DESC ,comment_time DESC
+         limit #{arg0} , 8
+    </select>
+
+    <select id="selectGossipPostItemsByNum" resultMap="postMap">
+        select tmp.post_id, tmp.user_id, tmp.user_nickname, tmp.user_headImg,  tmp.create_time, tmp.post_text, tmp.post_img, tmp.post_like, tmp.commenter_id,
+               u.user_nickname as commenter_nickname
+                , tmp.comment_content, tmp.comment_time from
+            (select gp.post_id, u.user_id, u.user_nickname, u.user_headImg,  gp.create_time, gp.post_text, gpi.post_img, gp.post_like,
+                    gpc.user_id as commenter_id
+                     , gpc.comment_content, gpc.create_time as comment_time
+             from gossip_post gp
+                      left join user u on u.user_id = gp.user_id
+                      left join gossippost_img gpi on gpi.post_id = gp.post_id
+                      left join gossippost_comment gpc on gpc.post_id = gp.post_id
+            ) as tmp
+                left join user u on tmp.commenter_id = u.user_id
+        order by gp.create_time DESC ,comment_time DESC
+            limit 0 , #{arg0}
+    </select>
+
+    <select id="selectGossipPostById" resultMap="postMap">
+        select tmp.post_id, tmp.user_id, tmp.user_nickname, tmp.user_headImg,  tmp.create_time, tmp.post_text, tmp.post_img, tmp.post_like, tmp.commenter_id,
+               u.user_nickname as commenter_nickname
+                , tmp.comment_content, tmp.comment_time from
+            (select gp.post_id, u.user_id, u.user_nickname, u.user_headImg,  gp.create_time, gp.post_text, gpi.post_img, gp.post_like,
+                    gpc.user_id as commenter_id
+                     , gpc.comment_content, gpc.create_time as comment_time
+             from gossip_post gp
+                      left join user u on u.user_id = gp.user_id
+                      left join gossippost_img gpi on gpi.post_id = gp.post_id
+                      left join gossippost_comment gpc on gpc.post_id = gp.post_id
+            ) as tmp
+                left join user u on tmp.commenter_id = u.user_id
+        where tmp.post_id = #{arg0}
+    </select>
+
+    <select id="selectGossipPostByLikeWord" resultMap="postMap">
+        select tmp.post_id, tmp.user_id, tmp.user_nickname, tmp.user_headImg,  tmp.create_time, tmp.post_text, tmp.post_img, tmp.post_like, tmp.commenter_id,
+               u.user_nickname as commenter_nickname
+                , tmp.comment_content, tmp.comment_time from
+            (select gp.post_id, u.user_id, u.user_nickname, u.user_headImg,  gp.create_time, gp.post_text, gpi.post_img, gp.post_like,
+                    gpc.user_id as commenter_id
+                     , gpc.comment_content, gpc.create_time as comment_time
+             from gossip_post gp
+                      left join user u on u.user_id = gp.user_id
+                      left join gossippost_img gpi on gpi.post_id = gp.post_id
+                      left join gossippost_comment gpc on gpc.post_id = gp.post_id
+            ) as tmp
+                left join user u on tmp.commenter_id = u.user_id
+        where tmp.user_nickname like #{keyword} or tmp.post_text like #{keyword}
+    </select>
+
+    <resultMap id="postMap" type="cn.beardestiny.param.GossipPostItem">
+        <result property="user_nickname" column="user_nickname" />
+        <result property="user_headImg" column="user_headImg" />
+        <result property="post_id" column="post_id" />
+        <result property="create_time" column="create_time" />
+        <result property="post_text" column="post_text" />
+        <collection property="post_img" javaType="ArrayList" ofType="String">
+            <result column="post_img" />
+        </collection>
+        <collection property="post_comment" javaType="ArrayList" ofType="GossipPostComment">
+            <result property="user_id" column="commenter_id" />
+            <result property="user_nickname" column="commenter_nickname" />
+            <result property="comment_content" column="comment_content" />
+            <result property="comment_time" column="comment_time" />
+        </collection>
+    </resultMap>
+
+</mapper>
