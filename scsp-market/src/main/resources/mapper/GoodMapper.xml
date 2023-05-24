@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.beardestiny.mapper.GoodMapper">
+
+    <select id="selectPageGood" resultType="cn.beardestiny.param.GoodItem">
+        SELECT g.good_id,g.good_name,g.cover_img,g.good_price,COUNT(gc.good_id) AS collect_num
+        FROM good g
+                 LEFT JOIN good_collect gc ON g.good_id = gc.good_id
+        <if test="orderWay == 'order1'">
+            <where>
+                <if test="leftPrice != 0 and rightPrice != 0">
+                    g.good_price &gt; #{leftPrice} and g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="leftPrice != 0 and rightPrice == 0">
+                    g.good_price &gt; #{leftPrice}
+                </if>
+                <if test="leftPrice == 0 and rightPrice != 0">
+                    g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="likeName != null">and g.good_name like #{likeName}</if>
+                <if test="category != null">and g.category_id = #{category}</if>
+                and g.good_status = 0
+            </where>
+            GROUP BY g.good_id, g.good_name,g.cover_img,g.good_price,g.create_time
+            ORDER BY g.create_time desc
+        </if>
+        <if test="orderWay == 'order2'">
+            <where>
+                <if test="leftPrice != 0 and rightPrice != 0">
+                    g.good_price &gt; #{leftPrice} and g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="leftPrice != 0 and rightPrice == 0">
+                    g.good_price &gt; #{leftPrice}
+                </if>
+                <if test="leftPrice == 0 and rightPrice != 0">
+                    g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="likeName != null">and g.good_name like #{likeName}</if>
+                <if test="category != null">and g.category_id = #{category}</if>
+                and g.good_status = 0
+            </where>
+            GROUP BY g.good_id, g.good_name,g.cover_img,g.good_price
+            ORDER BY g.good_price asc
+        </if>
+        <if test="orderWay == 'order3'">
+            <where>
+                <if test="leftPrice != 0 and rightPrice != 0">
+                    g.good_price &gt; #{leftPrice} and g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="leftPrice != 0 and rightPrice == 0">
+                    g.good_price &gt; #{leftPrice}
+                </if>
+                <if test="leftPrice == 0 and rightPrice != 0">
+                    g.good_price &lt; #{rightPrice}
+                </if>
+                <if test="likeName != null">and g.good_name like #{likeName}</if>
+                <if test="category != null">and g.category_id = #{category}</if>
+                and g.good_status = 0
+            </where>
+            GROUP BY g.good_id, g.good_name,g.cover_img,g.good_price
+            ORDER BY g.good_price desc
+        </if>
+            LIMIT #{pageNum},15
+    </select>
+
+
+    <select id="selectGoodById" resultMap="SingleGood">
+        select g.good_id, g.seller_id, u.user_nickname, g.good_name, cate.category_name, g.cover_img, g.good_price, g.good_number, g.good_detail , gi.detail_img, g.create_time
+        from good g
+                 left join good_img gi on g.good_id = gi.good_id
+                 left join user u on u.user_id = g.seller_id
+                 left join good_category cate on cate.category_id = g.category_id
+        where g.good_id = #{gid}
+    </select>
+
+    <resultMap id="SingleGood" type="cn.beardestiny.param.GoodSinglePage">
+        <result property="good_id" column="good_id" />
+        <result property="seller_id" column="seller_id" />
+        <result property="user_nickname" column="user_nickname" />
+        <result property="good_name" column="good_name" />
+        <result property="category_name" column="category_name" />
+        <result property="cover_img" column="cover_img" />
+        <result property="good_price" column="good_price" />
+        <result property="good_number" column="good_number" />
+        <result property="good_detail" column="good_detail" />
+        <result property="create_time" column="create_time" />
+        <collection property="detail_img" javaType="ArrayList" ofType="String">
+            <result column="detail_img" />
+        </collection>
+    </resultMap>
+
+    <select id="selectStall" resultType="cn.beardestiny.param.GoodItem">
+        select g.good_id, g.good_name, g.cover_img, g.good_price
+        from good g
+        where g.seller_id = (select user_id from user where user_nickname = #{nickname})
+        order by g.create_time desc
+    </select>
+
+    <update id="updateGoodNum">
+        update `good` set good_number = good_number - #{buyNum} where good_id = #{gid}
+    </update>
+
+    <select id="selectMyGood" resultType="cn.beardestiny.param.MyGood">
+        select create_time, cover_img, good_name, good_price, good_number, good_status from `good` where seller_id = #{uid}
+    </select>
+</mapper>
